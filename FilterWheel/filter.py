@@ -3,6 +3,7 @@
 import os
 import time
 from ctypes import *
+import random
 
 class FilterWheel(object):
 	def __init__(self):
@@ -48,6 +49,18 @@ class FilterWheel(object):
 		self.filter.zero()
 		return
 
+	def moveArb(self, pos = None):
+		"""
+		move to an arbitrary position in step space
+		arguments:
+			int pos - steps to move
+		return: 
+			0 - fail
+			1 - completed
+			-1 - fail
+		"""
+		self.filter.moveMotor(int(pos))
+
 	def moveToPosition(self, pos):
 		"""
 		move to a specific filter wheel position
@@ -58,10 +71,21 @@ class FilterWheel(object):
 			1 - succeed
 			-1 - unknown
 		"""
-		status = self.filter.moveToFilter(int(pos))
-		self.desPos = status
+		stepPos = self.filter.moveToFilter(int(pos))
+		print stepPos
+		self.desPos = stepPos
+		st = self.status()
+		print st
+		#for x in range(100):
+		#	print self.status()
 		
-		return status
+		while  st['currentStep'] != st['desiredStep']:
+			st = self.status()
+			print st
+			if st['desiredStep'] == None:
+				return stepPos
+		
+		return stepPos
 
 	def status(self):
 		"""
@@ -83,7 +107,8 @@ class FilterWheel(object):
 if __name__ == "__main__":
 	f = FilterWheel()
 	f.connect()
+	#f.zero()
 	print f.status()
-	f.home()
-	f.moveToPosition(5)
-        print f.status()
+	#f.home()
+	f.moveToPosition(random.randrange(0,5,1))
+	#f.moveToPosition(0)

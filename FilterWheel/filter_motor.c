@@ -25,7 +25,8 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
-static int incmv = 33200;
+static int incmv = 1325; //was 33200 before turning on sl
+static int encmv = 1325;
 int setup();
 int currentPos();
 int motorOn();
@@ -112,7 +113,7 @@ int moveMotor(char *mv){
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
-                return 1;
+                return -1;
         }
 	
 	
@@ -127,6 +128,8 @@ int moveMotor(char *mv){
                  }      
 	return 1;
 }
+
+
 
 /* Stop motor at current location but decelerate in a safe manner */
 int stopMotor(){
@@ -210,8 +213,8 @@ int moveToFilter(int pos){
 This really should use the encoder position
 */
 int filterPos(){
-	int pos = currentPos();
-	int fw = pos/incmv;
+	int pos = currentEnc();
+	int fw = pos/encmv;
 	return fw;
 }
 
@@ -299,21 +302,21 @@ int setVelocity(){
 	*Weird things can heppen if they are really high (motor stalls kinda).
 	*/
 	
-	strcpy(out, "LSPD=20000");
+	strcpy(out, "LSPD=300"); //was 20000
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=30000"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=1000"); //set high speed (original value 10000, 30000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "ACC=10"); //set acceleration (original value 300)
+        strcpy(out, "ACC=100"); //set acceleration (original value 300)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -350,14 +353,14 @@ int homeVelocity(){
         *Weird things can heppen if they are really high (motor stalls kinda).
         */
 	
-        strcpy(out, "LSPD=300"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=100"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=1000"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=500"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -406,7 +409,7 @@ int home(){
                 return 1;
         }
 
-	strcpy(out, "HSPD=10000"); //set high speed (original value 10000)
+	strcpy(out, "HSPD=1000"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -414,7 +417,7 @@ int home(){
         }
 
         
-        strcpy(out, "X410000"); //move the motor
+        strcpy(out, "X10000"); //move the motor, was 410000
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
@@ -450,12 +453,12 @@ int home(){
 			sleep(1);
 			//readConfig();	
 			
-			moveMotor("500");
+			moveMotor("20"); //was 500
 			sleep(2);
 			zero();	
 			printf("Zeropoint found, Detecting FW ID.\n");
 
-			moveMotor("-500");  //move to trigger point
+			moveMotor("-20");  //move to trigger point
 			sleep(3);
 			//read ID
 			int x;
@@ -693,7 +696,7 @@ int setup(){
         printf("Set Directional Polarity: %s\n",in);
 
 
-        strcpy(out, "SCV=1"); //read current
+        strcpy(out, "SCV=0"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -751,6 +754,31 @@ int setup(){
         }
 
 	printf("Write Motor Parameters, RW: %s\n",in);
+
+
+        sleep(1);
+        strcpy(out, "SL=1"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return -1;
+        }       
+        
+        printf("Write SL Parameters, SNL: %s\n",in);
+
+
+	 sleep(1);
+
+        strcpy(out, "SLR=25"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return -1;
+        }       
+
+        printf("Write SNL Parameters, SNL: %s\n",in);
+
+
         sleep(2.5);
 
         strcpy(out, "CLR"); //read current
