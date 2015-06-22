@@ -22,49 +22,41 @@ class shutterControl(object):
     def __init__(self):
 	"""
 	shutter solenoids defined as pin 39, and 40 on the PC104
+	pin_l refers to the pin controlling the left shutter, pin_r the right
+	when the airhoses are located to the right of the apparatus	
 	"""
         
 	self.shutter = CDLL("./shutter_interface.so")
         
-	self.expTime = 1
-	self.expReps = 3
+	self.expTime = 0.1
+	self.expReps = 10
         self.pin_r = 39
 	self.pin_l = 40
-	self.delay = 0.01
+	self.delay = 1
 	
 	print "opening connection"
         self.shutter.openConnection()
-	time.sleep(.1)  #I tend to sleep after opening any connection becuase it may have some time dependent routines it needs feedback from
-
+	time.sleep(.1)  #I tend to sleep after opening any connection because it may have some time dependent routines it needs feedback from
+	self.shutter.moveShutter(61,1)  #needed for initialization of PC104
 	print "exercising low level commands"
 	print "this should really be moved to a higher level test if we want one."
 	print "maybe add an exercise routine"
 
-	self.shutter.moveShutter(self.pin_l,0)
+	"""self.shutter.moveShutter(self.pin_r,0)
 	time.sleep(self.delay)
-	self.shutter.moveShutter(self.pin_r,0)
+	self.shutter.moveShutter(self.pin_l,0)
 	time.sleep(self.delay)
 	self.shutter.moveShutter(self.pin_l,1)
 	time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,1)
 	time.sleep(self.delay)	
-	self.shutter.moveShutter(self.pin_l,0)
+	self.shutter.moveShutter(self.pin_r,0)
         time.sleep(self.delay)
-        self.shutter.moveShutter(self.pin_r,0)
-        time.sleep(self.delay)
-
-	"""self.home = True
-	#self.shut_r = 39
-	#self.shut_l = 40
+        self.shutter.moveShutter(self.pin_l,0)
+        time.sleep(self.delay)"""
+	
+	self.sendHome()
         print "testing build"
-
-        time.sleep(1)
-        #self.sendHome()
-        time.sleep(0.5)
-        self.takeImages()
-	self.close()
-	"""        
-
 
     def sendHome(self):
 	""" Moves shutter to forward home position
@@ -74,9 +66,9 @@ class shutterControl(object):
 		True if task completed
 	"""
 
-        #self.shutter.moveShutter(self.pin_l,0)
+        self.shutter.moveShutter(self.pin_l,0)
         time.sleep(0.5)
-        #self.shutter.moveShutter(self.pin_r,0)
+        self.shutter.moveShutter(self.pin_r,0)
         self.home = True
         return
 
@@ -97,13 +89,6 @@ class shutterControl(object):
 	else:
 		RaiseException
 
-    def takeImages(self):
-	for i in range(self.expReps):
-	    self.expose()
-	    time.sleep(0.5)
-	    print i
-	return
-
     def expose(self):
 	if self.home == True:
 	    self.toPosRight(self.pin_r)
@@ -118,19 +103,21 @@ class shutterControl(object):
 	return
 
     def toPosRight(self,shutter):
-	#self.shutter.moveShutter(shutter,1)
+	self.shutter.moveShutter(shutter,1)
         return
     
     def toPosLeft(self,shutter):
-	#self.shutter.moveShutter(shutter,0)
-	time.sleep(0.5)
+	self.shutter.moveShutter(shutter,0)
 	return
 
     def close(self):
         print "sample"
-        #self.shutter.closeConnection(1,2)
+        self.shutter.closeConnection(1,2)
         print "\nend sample"
         return
 
 if __name__ == "__main__":
 	s=shutterControl()
+	s.expose()
+	time.sleep(5)
+	s.expose()
