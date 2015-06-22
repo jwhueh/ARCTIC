@@ -29,9 +29,8 @@ class shutterControl(object):
 	self.shutter = CDLL("./shutter_interface.so")
         
 	self.expTime = 0.1
-	self.expReps = 10
-        self.pin_r = 39
-	self.pin_l = 40
+        self.pin_r = 77
+	self.pin_l = 78
 	self.delay = 1
 	
 	print "opening connection"
@@ -55,6 +54,11 @@ class shutterControl(object):
         self.shutter.moveShutter(self.pin_l,0)
         time.sleep(self.delay)"""
 	
+	self.sendHome()
+	'''
+	method that checks for changes in the input from the Leach controller, when the value changes, initiates expose
+	'''
+	self.changeSense()
 	self.sendHome()
         print "testing build"
 
@@ -88,7 +92,12 @@ class shutterControl(object):
 		return False
 	else:
 		RaiseException
-
+    
+    def changeSense(self):
+	if self.shutter.leachMonitor() != None:
+	    self.expose()
+	    return   
+    
     def expose(self):
 	if self.home == True:
 	    self.toPosRight(self.pin_r)
