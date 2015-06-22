@@ -1,40 +1,59 @@
 #! /usr/bin/python
 
+"""
+shutter.py
+
+This program connects to the pc104 shutter_interface c file and does the high level commanding and computation of the shutter
+"""
+
+__author__ = ["Caitlin Doughty", "Joseph Huehnerhoff"]
+__copyright__ = "NA"
+__credits__ = [""]
+__license__ = "GPL"
+__version__ = "0.1"
+__maintainer__ = "NA"
+__email__ = "NA"
+__status__ = "Developement"
+
 import time
 from ctypes import *
 
 class shutterControl(object):
     def __init__(self):
-        self.shutter = CDLL("./shutter_interface.so")
-        self.expTime = 1
+	"""
+	shutter solenoids defined as pin 39, and 40 on the PC104
+	"""
+        
+	self.shutter = CDLL("./shutter_interface.so")
+        
+	self.expTime = 1
 	self.expReps = 3
         self.pin_r = 39
 	self.pin_l = 40
+	self.delay = 0.01
 	
-	#the main == name function will be executed when running from terminal but not when imported.  it is a cleaner way of implementing command line tests
-
 	print "opening connection"
         self.shutter.openConnection()
 	time.sleep(.1)  #I tend to sleep after opening any connection becuase it may have some time dependent routines it needs feedback from
 
-
 	print "exercising low level commands"
+	print "this should really be moved to a higher level test if we want one."
+	print "maybe add an exercise routine"
+
 	self.shutter.moveShutter(self.pin_l,0)
-	time.sleep(.1)
+	time.sleep(self.delay)
 	self.shutter.moveShutter(self.pin_r,0)
-	time.sleep(.1)
+	time.sleep(self.delay)
 	self.shutter.moveShutter(self.pin_l,1)
-	time.sleep(.1)
+	time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,1)
-	time.sleep(.1)	
+	time.sleep(self.delay)	
 	self.shutter.moveShutter(self.pin_l,0)
-        time.sleep(.1)
+        time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,0)
-        time.sleep(.1)
+        time.sleep(self.delay)
 
-
-
-	self.home = True
+	"""self.home = True
 	#self.shut_r = 39
 	#self.shut_l = 40
         print "testing build"
@@ -44,7 +63,9 @@ class shutterControl(object):
         time.sleep(0.5)
         self.takeImages()
 	self.close()
-        
+	"""        
+
+
     def sendHome(self):
 	""" Moves shutter to forward home position
 	Args:
