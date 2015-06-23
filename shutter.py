@@ -91,12 +91,22 @@ class shutterControl(object):
 		return False
 	else:
 		RaiseException
+
     
     def changeSense(self):
+	'''
+	calls shutter_watch methods to observe for changes in pin values, returns value pins changed to, initiates opening and closing of the shutters depending on position and pin value, does nothing if already in requested state
+	currently, after any motion will ask user if they want to continue
+	Args:
+		None
+	Returns:
+		None
+	'''
+
 	while self.running == True:
 	    print "heading to loop"
 	    signal_value = self.waiting.loop()
-	    if signal_value == 1:	#want to initiate opening, do nothing if already open
+	    if signal_value == 1:
 		if self.open != True:
 		    if self.home == True:
 			#self.toPosRight(self.pin_r)
@@ -110,7 +120,7 @@ class shutterControl(object):
 			self.home = False
 			self.open = True
 			print "opening by moving left shutter to the left"
-	    else:			#want to initiate closing, do nothing if already closed
+	    else:
 		if self.open == True:
 		    if self.right == True:
 			#self.toPosRight(self.pin_l)
@@ -129,13 +139,32 @@ class shutterControl(object):
 		self.running = False   
 	return
 
+
     def toPosRight(self,shutter):
+	'''
+	moves a single shutter to the reverse home position
+	Args:
+		shutter pin identifier
+	Returns:
+		None
+	'''
+
 	self.shutter.moveShutter(shutter,1)
         return
     
+
     def toPosLeft(self,shutter):
+	'''
+	moves a single shutter to the home position
+	Args:
+                shutter pin identifier
+        Returns:
+                None
+        '''
+
 	self.shutter.moveShutter(shutter,0)
 	return
+
 
     def close(self):
         print "sample"
@@ -143,8 +172,10 @@ class shutterControl(object):
         print "\nend sample"
         return
 
+
     def userInput(self):
 	continuing = raw_input("Continue? y or n\n")
+	print "\n"
 	return continuing
 
 if __name__ == "__main__":
