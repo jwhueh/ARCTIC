@@ -19,23 +19,7 @@ void print_csv(int dio, int value)
 	fflush(stdout);
 }
 
-/*int main(){
- 	int opt_watch = 1;
-        int c, i;
-
-        evgpioinit();
-
-        if(!opt_watch) return 0;
-        
-        evclrwatch();
-        while(1) {
-                evwatchin(print_csv);
-        }
-
-}
-
-*/
-int loop(double expTime){
+int loop(){
 	int opt_watch = 1;
         evgpioinit();
 
@@ -44,7 +28,7 @@ int loop(double expTime){
         evclrwatch();
 	int continuing = 0;
 	while(continuing < 1) {
-	      evwatchin(print_csv);
-	      continuing = 1;
+            evwatchin(print_csv);
+	    continuing = 1;
 	}
 }

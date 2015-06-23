@@ -32,6 +32,9 @@ class shutterControl(object):
         self.pin_r = 76
 	self.pin_l = 77
 	self.delay = 1
+	self.home = True
+	self.open = False
+	self.right = True	# directional variable, next motion is right when true
 	self.running = True
 	print "opening connection"
         self.shutter.openConnection()
@@ -69,6 +72,7 @@ class shutterControl(object):
         time.sleep(0.5)
         self.shutter.moveShutter(self.pin_r,0)
         self.home = True
+	self.open = False
         return
 
     def checkStatus(self):
@@ -91,25 +95,33 @@ class shutterControl(object):
     def changeSense(self):
 	while self.running == True:
 	    print "heading to loop"
-	    self.waiting.loop(c_double(self.expTime))
-	    #self.expose()
-	    print "exposing"
+	    self.waiting.loop()
+	    if self.right == True:
+		if self.home == True:
+		    #self.toPosRight(pin_r)
+		    self.home = False
+		    self.open = True 
+		    print "now open and direction is right"
+		else:
+		    #self.toPosRight(pin_l)
+		    self.open = False
+		    self.right = False
+		    print "now closed in reverse home and direction is left"
+	    else:
+		if self.open == True:
+		    #self.toPosLeft(pin_r)
+		    self.open = False
+		    self.home = True
+		    self.right = True
+		    print "now closed in home and direction is right"
+		else:
+		    #self.toPosLeft(pin_l)
+		    self.open = True
+		    self.home = False
+		    print "now open and direction is left"
 	    continuing = self.userInput()
 	    if continuing == "n":
 		self.running = False   
-	return
-
-    def expose(self):
-	if self.home == True:
-	    self.toPosRight(self.pin_r)
-	    time.sleep(self.expTime)
-            self.toPosRight(self.pin_l)
-	    self.home = False        
-	else:
-            self.toPosLeft(self.pin_l)
-	    time.sleep(self.expTime)
-	    self.toPosLeft(self.pin_r)
-	    self.home = True
 	return
 
     def toPosRight(self,shutter):
