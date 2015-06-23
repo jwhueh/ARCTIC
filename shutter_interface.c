@@ -56,18 +56,18 @@ void openConnection(){
 
 void print_csv(int dio, int value)
 {
+	dio = 33;
+	value = 0;
         printf("%d,%d\n", dio, value);
         fflush(stdout);
 }
 
-void leachMonitor(int condition){
+void leachMonitor()
+{
         printf("entered leachMonitor");
         evclrwatch();
-        while(condition == 1) {
-            evwatchin(print_csv);
-            printf ("running evwatchin");
-        }
-        return;
+        evwatchin(print_csv);
+	return;
 }
 
 void closeConnection(int pin, int pos){

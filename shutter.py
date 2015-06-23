@@ -13,7 +13,7 @@ __license__ = "GPL"
 __version__ = "0.1"
 __maintainer__ = "NA"
 __email__ = "NA"
-__status__ = "Developement"
+__status__ = "Development"
 
 import time
 from ctypes import *
@@ -27,6 +27,7 @@ class shutterControl(object):
 	"""
         
 	self.shutter = CDLL("./shutter_interface.so")
+	#self.waiting = CDLL("./waiting.so")
 	self.expTime = 0.1
         self.pin_r = 39
 	self.pin_l = 40
@@ -89,9 +90,8 @@ class shutterControl(object):
     
     def changeSense(self):
 	print "starting changeSense"
-	print self.running
-	self.shutter.leachMonitor(self.running,self.check,0)	
-	print "sensed change"
+	self.shutter.leachMonitor()	
+	print "ending changeSense"
 	return
 
     def start(self):
