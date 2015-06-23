@@ -27,7 +27,7 @@ class shutterControl(object):
 	"""
         
 	self.shutter = CDLL("./shutter_interface.so")
-	#self.waiting = CDLL("./waiting.so")
+	self.waiting = CDLL("./shutter_watch.so")
 	self.expTime = 0.1
         self.pin_r = 39
 	self.pin_l = 40
@@ -90,7 +90,7 @@ class shutterControl(object):
     
     def changeSense(self):
 	print "starting changeSense"
-	self.shutter.leachMonitor()	
+	self.waiting.loop()	
 	print "ending changeSense"
 	return
 
