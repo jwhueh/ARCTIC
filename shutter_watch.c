@@ -1,5 +1,5 @@
 // Compile with gcc evgpioctl.c -o evgpioctl evgpio.c -mcpu=arm9
-
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,9 +19,9 @@ void print_csv(int dio, int value)
 	fflush(stdout);
 }
 
-int main(){
- int opt_watch = 0;
- //       int c, i;
+/*int main(){
+ 	int opt_watch = 1;
+        int c, i;
 
         evgpioinit();
 
@@ -32,22 +32,19 @@ int main(){
                 evwatchin(print_csv);
         }
 
-
-
 }
 
-
-int loop(){
-	int opt_watch = 0;
-
+*/
+int loop(double expTime){
+	int opt_watch = 1;
         evgpioinit();
 
         if(!opt_watch) return 0;
-
+	
         evclrwatch();
-        while(1) {
-                evwatchin(print_csv);
-        }
+	int continuing = 0;
+	while(continuing < 1) {
+	      evwatchin(print_csv);
+	      continuing = 1;
+	}
 }
-
-

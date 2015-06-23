@@ -29,33 +29,33 @@ class shutterControl(object):
 	self.shutter = CDLL("./shutter_interface.so")
 	self.waiting = CDLL("./shutter_watch.so")
 	self.expTime = 0.1
-        self.pin_r = 39
-	self.pin_l = 40
+        self.pin_r = 76
+	self.pin_l = 77
 	self.delay = 1
-	self.check = 33
-	self.running = None  # once set, 1 corresponds to True, 0 to False
+	self.running = True
 	print "opening connection"
         self.shutter.openConnection()
 	time.sleep(.1)  #I tend to sleep after opening any connection because it may have some time dependent routines it needs feedback from
-	self.shutter.moveShutter(61,1)  #needed for initialization of PC104
+	#self.shutter.moveShutter(61,1)  #needed for initialization of PC104
 	print "exercising low level commands"
 	print "this should really be moved to a higher level test if we want one."
-	print "maybe add an exercise routine"
 
-	"""self.shutter.moveShutter(self.pin_r,0)
-	time.sleep(self.delay)
-	self.shutter.moveShutter(self.pin_l,0)
-	time.sleep(self.delay)
-	self.shutter.moveShutter(self.pin_l,1)
-	time.sleep(self.delay)
-        self.shutter.moveShutter(self.pin_r,1)
-	time.sleep(self.delay)	
+        print "testing build"
+
+    def exerciseRoutine(self):
 	self.shutter.moveShutter(self.pin_r,0)
         time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_l,0)
-        time.sleep(self.delay)"""
-	
-        print "testing build"
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_l,1)
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_r,1)
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_r,0)
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_l,0)
+        time.sleep(self.delay)
+	return
 
     def sendHome(self):
 	""" Moves shutter to forward home position
@@ -89,17 +89,14 @@ class shutterControl(object):
 		RaiseException
     
     def changeSense(self):
-	print "starting changeSense"
-	self.waiting.loop()	
-	print "ending changeSense"
-	return
-
-    def start(self):
-	self.running = 1
-	return
-
-    def stop(self):
-	self.running = 0
+	while self.running == True:
+	    print "heading to loop"
+	    self.waiting.loop(c_double(self.expTime))
+	    #self.expose()
+	    print "exposing"
+	    continuing = self.userInput()
+	    if continuing == "n":
+		self.running = False   
 	return
 
     def expose(self):
@@ -129,13 +126,13 @@ class shutterControl(object):
         print "\nend sample"
         return
 
+    def userInput(self):
+	continuing = raw_input("Continue? y or n\n")
+	return continuing
+
 if __name__ == "__main__":
 	s=shutterControl()
-	s.start()
-	s.sendHome()
+	#s.sendHome()
+	#s.exerciseRoutine()
 	s.changeSense()
-	s.stop()
-	s.sendHome()
-	#s.expose()
-	time.sleep(5)
-	#s.expose()
+	#s.sendHome()

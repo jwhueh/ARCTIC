@@ -54,22 +54,6 @@ void openConnection(){
 	return;
 }
 
-void print_csv(int dio, int value)
-{
-	dio = 33;
-	value = 0;
-        printf("%d,%d\n", dio, value);
-        fflush(stdout);
-}
-
-void leachMonitor()
-{
-        printf("entered leachMonitor");
-        evclrwatch();
-        evwatchin(print_csv);
-	return;
-}
-
 void closeConnection(int pin, int pos){
 	printf ("%d, %d", pin, pos);
 	return;
@@ -79,4 +63,3 @@ void shutterStatus(){
 
 	return;
 }
-
