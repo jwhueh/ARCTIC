@@ -95,30 +95,35 @@ class shutterControl(object):
     def changeSense(self):
 	while self.running == True:
 	    print "heading to loop"
-	    self.waiting.loop()
-	    if self.right == True:
-		if self.home == True:
-		    #self.toPosRight(pin_r)
-		    self.home = False
-		    self.open = True 
-		    print "now open and direction is right"
-		else:
-		    #self.toPosRight(pin_l)
-		    self.open = False
-		    self.right = False
-		    print "now closed in reverse home and direction is left"
-	    else:
+	    signal_value = self.waiting.loop()
+	    if signal_value == 1:	#want to initiate opening, do nothing if already open
+		if self.open != True:
+		    if self.home == True:
+			#self.toPosRight(self.pin_r)
+			self.right = True
+			self.home = False
+			self.open = True
+			print "opening by moving right shutter to the right"
+		    else:
+			#self.toPosLeft(self.pin_l)
+			self.right = False
+			self.home = False
+			self.open = True
+			print "opening by moving left shutter to the left"
+	    else:			#want to initiate closing, do nothing if already closed
 		if self.open == True:
-		    #self.toPosLeft(pin_r)
-		    self.open = False
-		    self.home = True
-		    self.right = True
-		    print "now closed in home and direction is right"
-		else:
-		    #self.toPosLeft(pin_l)
-		    self.open = True
-		    self.home = False
-		    print "now open and direction is left"
+		    if self.right == True:
+			#self.toPosRight(self.pin_l)
+			self.right = False
+			self.home = False
+			self.open = False
+			print "closing by moving left shutter to the right"
+		    else:
+			#self.toPosLeft(self.pin_r)
+			self.right = True
+			self.home = True
+			self.open = False
+			print "closing by moving right shutter to the left"
 	    continuing = self.userInput()
 	    if continuing == "n":
 		self.running = False   

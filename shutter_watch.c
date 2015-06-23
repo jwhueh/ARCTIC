@@ -13,22 +13,21 @@
 
 #include "evgpio.h"
 
+static int pinval;
 void print_csv(int dio, int value)
 {
 	printf("%d,%d\n", dio, value);
 	fflush(stdout);
+	pinval = evgetin(dio);
 }
 
 int loop(){
-	int opt_watch = 1;
+	//int opt_watch = 1;
         evgpioinit();
 
-        if(!opt_watch) return 0;
+        //if(!opt_watch) return 0;
 	
         evclrwatch();
-	int continuing = 0;
-	while(continuing < 1) {
-            evwatchin(print_csv);
-	    continuing = 1;
-	}
+        evwatchin(print_csv);
+	return pinval;
 }
