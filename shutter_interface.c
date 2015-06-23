@@ -54,6 +54,22 @@ void openConnection(){
 	return;
 }
 
+void print_csv(int dio, int value)
+{
+        printf("%d,%d\n", dio, value);
+        fflush(stdout);
+}
+
+void leachMonitor(int condition){
+        printf("entered leachMonitor");
+        evclrwatch();
+        while(condition == 1) {
+            evwatchin(print_csv);
+            printf ("running evwatchin");
+        }
+        return;
+}
+
 void closeConnection(int pin, int pos){
 	printf ("%d, %d", pin, pos);
 	return;

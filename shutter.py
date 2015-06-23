@@ -27,12 +27,12 @@ class shutterControl(object):
 	"""
         
 	self.shutter = CDLL("./shutter_interface.so")
-        
 	self.expTime = 0.1
-        self.pin_r = 77
-	self.pin_l = 78
+        self.pin_r = 39
+	self.pin_l = 40
 	self.delay = 1
-	
+	self.check = 33
+	self.running = None  # once set, 1 corresponds to True, 0 to False
 	print "opening connection"
         self.shutter.openConnection()
 	time.sleep(.1)  #I tend to sleep after opening any connection because it may have some time dependent routines it needs feedback from
@@ -54,12 +54,6 @@ class shutterControl(object):
         self.shutter.moveShutter(self.pin_l,0)
         time.sleep(self.delay)"""
 	
-	self.sendHome()
-	'''
-	method that checks for changes in the input from the Leach controller, when the value changes, initiates expose
-	'''
-	self.changeSense()
-	self.sendHome()
         print "testing build"
 
     def sendHome(self):
@@ -94,10 +88,20 @@ class shutterControl(object):
 		RaiseException
     
     def changeSense(self):
-	if self.shutter.leachMonitor() != None:
-	    self.expose()
-	    return   
-    
+	print "starting changeSense"
+	print self.running
+	self.shutter.leachMonitor(self.running,self.check,0)	
+	print "sensed change"
+	return
+
+    def start(self):
+	self.running = 1
+	return
+
+    def stop(self):
+	self.running = 0
+	return
+
     def expose(self):
 	if self.home == True:
 	    self.toPosRight(self.pin_r)
@@ -127,6 +131,11 @@ class shutterControl(object):
 
 if __name__ == "__main__":
 	s=shutterControl()
-	s.expose()
+	s.start()
+	s.sendHome()
+	s.changeSense()
+	s.stop()
+	s.sendHome()
+	#s.expose()
 	time.sleep(5)
-	s.expose()
+	#s.expose()
