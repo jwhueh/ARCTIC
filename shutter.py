@@ -29,8 +29,8 @@ class shutterControl(object):
 	self.shutter = CDLL("./shutter_interface.so")
 	self.waiting = CDLL("./shutter_watch.so")
 	self.expTime = 0.1
-        self.pin_r = 76
-	self.pin_l = 77
+        self.pin_r = 77
+	self.pin_l = 76
 	self.delay = 1
 	self.home = True
 	self.open = False
@@ -109,13 +109,13 @@ class shutterControl(object):
 	    if signal_value == 1:
 		if self.open != True:
 		    if self.home == True:
-			#self.toPosRight(self.pin_r)
+			self.toPosRight(self.pin_r)
 			self.right = True
 			self.home = False
 			self.open = True
 			print "opening by moving right shutter to the right"
 		    else:
-			#self.toPosLeft(self.pin_l)
+			self.toPosLeft(self.pin_l)
 			self.right = False
 			self.home = False
 			self.open = True
@@ -123,20 +123,20 @@ class shutterControl(object):
 	    else:
 		if self.open == True:
 		    if self.right == True:
-			#self.toPosRight(self.pin_l)
+			self.toPosRight(self.pin_l)
 			self.right = False
 			self.home = False
 			self.open = False
 			print "closing by moving left shutter to the right"
 		    else:
-			#self.toPosLeft(self.pin_r)
+			self.toPosLeft(self.pin_r)
 			self.right = True
 			self.home = True
 			self.open = False
 			print "closing by moving right shutter to the left"
-	    continuing = self.userInput()
-	    if continuing == "n":
-		self.running = False   
+	    #continuing = self.userInput()
+	    '''if continuing == "n":
+		self.running = False'''   
 	return
 
 
@@ -180,7 +180,7 @@ class shutterControl(object):
 
 if __name__ == "__main__":
 	s=shutterControl()
-	#s.sendHome()
+	s.sendHome()
 	#s.exerciseRoutine()
 	s.changeSense()
-	#s.sendHome()
+	s.sendHome()
