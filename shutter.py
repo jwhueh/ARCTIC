@@ -46,17 +46,17 @@ class shutterControl(object):
         print "testing build"
 
     def exerciseRoutine(self):
-	self.shutter.moveShutter(self.pin_r,0)
-        time.sleep(self.delay)
-        self.shutter.moveShutter(self.pin_l,0)
-        time.sleep(self.delay)
-        self.shutter.moveShutter(self.pin_l,1)
-        time.sleep(self.delay)
-        self.shutter.moveShutter(self.pin_r,1)
+	self.shutter.moveShutter(self.pin_l,0)
         time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,0)
         time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_r,1)
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_l,1)
+        time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_l,0)
+        time.sleep(self.delay)
+        self.shutter.moveShutter(self.pin_r,0)
         time.sleep(self.delay)
 	return
 
@@ -102,41 +102,33 @@ class shutterControl(object):
 	Returns:
 		None
 	'''
-
 	while self.running == True:
 	    print "heading to loop"
 	    signal_value = self.waiting.loop()
-	    if signal_value == 1:
+            if signal_value == 1:
 		if self.open != True:
-		    if self.home == True:
-			self.toPosRight(self.pin_r)
-			self.right = True
+	            if self.home == True:
+		        self.toPosRight(self.pin_r)
+		        self.right = True
 			self.home = False
 			self.open = True
-			print "opening by moving right shutter to the right"
 		    else:
 			self.toPosLeft(self.pin_l)
 			self.right = False
 			self.home = False
 			self.open = True
-			print "opening by moving left shutter to the left"
 	    else:
 		if self.open == True:
 		    if self.right == True:
-			self.toPosRight(self.pin_l)
+		        self.toPosRight(self.pin_l)
 			self.right = False
 			self.home = False
-			self.open = False
-			print "closing by moving left shutter to the right"
+		        self.open = False
 		    else:
 			self.toPosLeft(self.pin_r)
 			self.right = True
 			self.home = True
 			self.open = False
-			print "closing by moving right shutter to the left"
-	    #continuing = self.userInput()
-	    '''if continuing == "n":
-		self.running = False'''   
 	return
 
 
@@ -181,6 +173,6 @@ class shutterControl(object):
 if __name__ == "__main__":
 	s=shutterControl()
 	s.sendHome()
-	#s.exerciseRoutine()
+	s.exerciseRoutine()
 	s.changeSense()
 	s.sendHome()
