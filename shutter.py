@@ -16,6 +16,7 @@ __email__ = "NA"
 __status__ = "Development"
 
 import time
+from time import gmtime, strftime
 from ctypes import *
 
 class shutterControl(object):
@@ -28,13 +29,15 @@ class shutterControl(object):
         
 	self.shutter = CDLL("./shutter_interface.so")
 	self.waiting = CDLL("./shutter_watch.so")
-	self.expTime = 0.1
-        self.pin_r = 77
-	self.pin_l = 76
-	self.delay = 1
-	self.home = True
-	self.open = False
-	self.right = True	# directional variable, next motion is right when true
+        self.pin_r = 76
+	self.pin_l = 77
+	self.delay = 5
+	self.hall_arr = []
+	current_time = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
+        file = open("/root/ARCTIC/"+current_time+"logfile.txt", 'w')	
+	self.home = None
+	self.open = None
+	self.right = None	# directional variable, next motion is right when true
 	self.running = True
 	print "opening connection"
         self.shutter.openConnection()
@@ -71,9 +74,8 @@ class shutterControl(object):
         self.shutter.moveShutter(self.pin_l,0)
         time.sleep(0.5)
         self.shutter.moveShutter(self.pin_r,0)
-        self.home = True
-	self.open = False
-        return
+        self.checkStatus()
+	return
 
     def checkStatus(self):
 	""" Checks the positional status of the shutter blades
@@ -82,17 +84,26 @@ class shutterControl(object):
 	Returns:
 		True if on track 1, False if on track 2.
 	"""
-
-	if self.home == True:
+	time.sleep(self.delay)
+	self.hallArrayMake()
+	print self.hall_arr
+	if self.hall_arr[3][1] == self.hall_arr[4][1]:
+	    if self.hall_arr[3][1] == 0:
 		print 'at forward home position'
-		return True
-	elif self.home == False:
+		self.home = True
+		self.open = False
+		self.right = True
+	    else:
 		print 'at reverse home position'
-		return False
-	else:
-		RaiseException
+		self.home = False
+		self.open = False
+		self.right = False
+	else: 
+	    print 'open'
+	    self.home = False
+	    self.open = True
+	return
 
-    
     def changeSense(self):
 	'''
 	calls shutter_watch methods to observe for changes in pin values, returns value pins changed to, initiates opening and closing of the shutters depending on position and pin value, does nothing if already in requested state
@@ -102,33 +113,33 @@ class shutterControl(object):
 	Returns:
 		None
 	'''
+	start_time = 0;
+        end_time = 0;
+
 	while self.running == True:
 	    print "heading to loop"
+	    #signal_value = int(self.waiting.loop(c_int(33)))
 	    signal_value = self.waiting.loop()
-            if signal_value == 1:
-		if self.open != True:
-	            if self.home == True:
-		        self.toPosRight(self.pin_r)
-		        self.right = True
-			self.home = False
-			self.open = True
-		    else:
-			self.toPosLeft(self.pin_l)
-			self.right = False
-			self.home = False
-			self.open = True
+	    if signal_value == 1:
+	        if self.home == True:
+	            self.toPosRight(self.pin_r)
+		    #start_time = self.waiting.timing(c_int(26))
+		    self.checkStatus()
+		else:
+		    self.toPosLeft(self.pin_l)
+		    #start_time = self.waiting.timing(30)
+		    self.checkStatus()
 	    else:
-		if self.open == True:
-		    if self.right == True:
-		        self.toPosRight(self.pin_l)
-			self.right = False
-			self.home = False
-		        self.open = False
-		    else:
-			self.toPosLeft(self.pin_r)
-			self.right = True
-			self.home = True
-			self.open = False
+		if self.right == True:
+		    self.toPosRight(self.pin_l)
+	            #end_time = self.waiting.timing(31)
+		    self.checkStatus()
+		    #self.printLog(start_time,end_time)
+		else:
+	            self.toPosLeft(self.pin_r)
+		    #end_time = self.waiting.timing(27)
+		    self.checkStatus()
+		    #self.printLog(start_time,end_time)
 	return
 
 
@@ -157,13 +168,26 @@ class shutterControl(object):
 	self.shutter.moveShutter(shutter,0)
 	return
 
+    def hallArrayMake(self):
+	for i in range(25,33):
+	    value = self.waiting.getVal(c_int(i))
+	    pair = [i,value]
+	    self.hall_arr.append(pair)
+	    print i, value
+	return
+
+    def printLog(self, start_time, end_time):	
+	expTime = end_time-start_time
+	for pin in self.hall_arr:
+	    file.write("%s:%s "(pin[0],pin[1]))
+	file.write("%s\n"(expTime))
+	return
 
     def close(self):
         print "sample"
         self.shutter.closeConnection(1,2)
         print "\nend sample"
         return
-
 
     def userInput(self):
 	continuing = raw_input("Continue? y or n\n")
@@ -172,7 +196,9 @@ class shutterControl(object):
 
 if __name__ == "__main__":
 	s=shutterControl()
+	s.hallArrayMake()
 	s.sendHome()
 	s.exerciseRoutine()
 	s.changeSense()
-	s.sendHome()
+	file.close()
+	#s.sendHome()
