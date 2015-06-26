@@ -31,8 +31,6 @@ class shutterControl(object):
         self.pin_r = 76
 	self.pin_l = 77
 	self.delay = 0.5
-	current_time = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
-        self.logfile = open("/root/ARCTIC/"+current_time+"logfile.txt", 'w')	
 	self.home = None
 	self.open = None
 	self.right = None	# directional variable, next motion is right when true
@@ -126,12 +124,10 @@ class shutterControl(object):
 		    self.toPosRight(self.pin_l)
 	            end_time = float(self.waiting.loop(c_int(31)))
 		    self.checkStatus()
-		    self.printLog(start_time,end_time)
 		elif self.right == False and self.home == False and self.open == True:
 	            self.toPosLeft(self.pin_r)
 		    end_time = float(self.waiting.loop(c_int(27)))
 		    self.checkStatus()
-		    self.printLog(start_time,end_time)
 	return
 
 
@@ -168,15 +164,6 @@ class shutterControl(object):
 	    hallArray.append(pair)
 	return hallArray
 
-    def printLog(self, start_time, end_time):	
-	expTime = float(end_time-start_time)
-	self.logfile.write("%s: " %expTime)
-	hallArray = self.hallArrayMake()
-	for pin in hallArray:
-	    self.logfile.write("|pin %s reading %s|"%(pin[0],pin[1]))
-	self.logfile.write("\n")
-	return
-
     def close(self):
         print "sample"
         self.shutter.closeConnection(1,2)
@@ -189,5 +176,5 @@ if __name__ == "__main__":
 	s.sendHome()
 	s.exerciseRoutine()
 	s.changeSense()
-	file.close()
+	#file.close()
 	#s.sendHome()
