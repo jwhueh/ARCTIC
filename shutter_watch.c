@@ -35,8 +35,8 @@ int loop(){
 	return pinval;
 }
 
-/*
-double loop(int dio){
+
+/*double loop(int dio){
         evgpioinit();
         evclrwatch();
         int waiting = 0;
@@ -44,8 +44,9 @@ double loop(int dio){
 		evwatchin(print_csv);
 		if(dio == 33){
 			waiting = 1;
-			double pinval_d = (double)pinval;
-			return pinval_d;
+			//double pinval_d = (double)pinval;
+			//return pinval_d;
+			return pinval;
 		}
 		else if(dio == pin){
 			waiting = 1;
@@ -53,8 +54,8 @@ double loop(int dio){
 			return event_t;
 		}
 	}
-}
-*/
+}*/
+
 int getVal(int dio){
 	evgpioinit();
 	int value = evgetin(dio);

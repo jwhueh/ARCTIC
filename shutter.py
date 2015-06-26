@@ -30,7 +30,7 @@ class shutterControl(object):
 	self.waiting = CDLL("./shutter_watch.so")
         self.pin_r = 76
 	self.pin_l = 77
-	self.delay = 2
+	self.delay = 0.5
 	current_time = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
         self.logfile = open("/root/ARCTIC/"+current_time+"logfile.txt", 'w')	
 	self.home = None
@@ -70,7 +70,7 @@ class shutterControl(object):
 	"""
 
         self.shutter.moveShutter(self.pin_l,0)
-        time.sleep(0.5)
+        time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,0)
         self.checkStatus()
 	return
@@ -84,7 +84,6 @@ class shutterControl(object):
 	"""
 	time.sleep(self.delay)
 	hallArray = self.hallArrayMake()
-	print hallArray
 	if hallArray[3][1] == hallArray[4][1]:
 	    if hallArray[3][1] == 0:
 		print 'at forward home position'
@@ -117,6 +116,7 @@ class shutterControl(object):
 	while self.running == True:
 	    print "heading to loop"
 	    #signal_value = int(self.waiting.loop(c_int(33)))
+	    #print signal_value
 	    signal_value = self.waiting.loop()
 	    if signal_value == 1:
 	        if self.home == True:
@@ -141,7 +141,7 @@ class shutterControl(object):
 	            self.toPosLeft(self.pin_r)
 		    end_time = float(self.waiting.timing(c_int(27)))
 		    self.checkStatus()
-		    #self.printLog(start_time,end_time)
+		    self.printLog(start_time,end_time)
 	return
 
 
