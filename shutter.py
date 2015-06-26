@@ -180,10 +180,11 @@ class shutterControl(object):
 
     def printLog(self, start_time, end_time):	
 	expTime = float(end_time-start_time)
+	self.logfile.write("%s: " %expTime)
 	hallArray = self.hallArrayMake()
 	for pin in hallArray:
-	    self.logfile.write("%s:%s"%(pin[0],pin[1]))
-	self.logfile.write("%s\n" %expTime)
+	    self.logfile.write("|pin %s reading %s|"%(pin[0],pin[1]))
+	self.logfile.write("\n")
 	return
 
     def close(self):
