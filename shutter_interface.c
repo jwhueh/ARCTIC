@@ -34,16 +34,9 @@
 	return 1;
 }*/
 
-/* Compute factorial of n */
-int  fact(int n) {
-	printf ("%d", n);
-	if (n <= 1) return 1;
-	else return n*fact(n-1);
-}
-
 
 void moveShutter(int pin, int pos){
-	printf ("%d, %d", pin, pos);
+	//printf ("%d, %d", pin, pos);
 	evsetdata(pin,pos);
 	return;
 }
@@ -55,7 +48,7 @@ void openConnection(){
 }
 
 void closeConnection(int pin, int pos){
-	printf ("%d, %d", pin, pos);
+	//printf ("%d, %d", pin, pos);
 	return;
 }
 

@@ -41,12 +41,9 @@ class shutterControl(object):
         self.shutter.openConnection()
 	time.sleep(.1)  #I tend to sleep after opening any connection because it may have some time dependent routines it needs feedback from
 	#self.shutter.moveShutter(61,1)  #needed for initialization of PC104
-	print "exercising low level commands"
-	print "this should really be moved to a higher level test if we want one."
-
-        print "testing build"
 
     def exerciseRoutine(self):
+	print "Just exercising.\n"
 	self.shutter.moveShutter(self.pin_l,0)
         time.sleep(self.delay)
         self.shutter.moveShutter(self.pin_r,0)
@@ -86,17 +83,17 @@ class shutterControl(object):
 	hallArray = self.hallArrayMake()
 	if hallArray[3][1] == hallArray[4][1]:
 	    if hallArray[3][1] == 0:
-		print 'at forward home position'
+		print 'Closed.\n'
 		self.home = True
 		self.open = False
 		self.right = True
 	    else:
-		print 'at reverse home position'
+		print 'Closed.\n'
 		self.home = False
 		self.open = False
 		self.right = False
 	else: 
-	    print 'open'
+	    print 'Exposing.\n'
 	    self.home = False
 	    self.open = True
 	return
@@ -114,32 +111,25 @@ class shutterControl(object):
         end_time = 0;
 
 	while self.running == True:
-	    print "heading to loop"
-	    #signal_value = int(self.waiting.loop(c_int(33)))
-	    #print signal_value
-	    signal_value = self.waiting.loop()
+	    signal_value = self.waiting.loop(c_int(33))
 	    if signal_value == 1:
 	        if self.home == True and self.right == True and self.open == False:
-		    print 'got signal to open from home'
 	            self.toPosRight(self.pin_r)
-		    start_time = float(self.waiting.timing(c_int(26)))
+		    start_time = float(self.waiting.loop(c_int(26)))
 		    self.checkStatus()
 		elif self.home == False and self.right == False and self.open == False:
-		    print 'got signal to open from reverse home'
 		    self.toPosLeft(self.pin_l)
-		    start_time = float(self.waiting.timing(c_int(30)))
+		    start_time = float(self.waiting.loop(c_int(30)))
 		    self.checkStatus()
 	    else:
 		if self.right == True and self.home == False and self.open == True:
-		    print 'got signal to close moving right'
 		    self.toPosRight(self.pin_l)
-	            end_time = float(self.waiting.timing(c_int(31)))
+	            end_time = float(self.waiting.loop(c_int(31)))
 		    self.checkStatus()
 		    self.printLog(start_time,end_time)
 		elif self.right == False and self.home == False and self.open == True:
-		    print 'got signal to close moving left'
 	            self.toPosLeft(self.pin_r)
-		    end_time = float(self.waiting.timing(c_int(27)))
+		    end_time = float(self.waiting.loop(c_int(27)))
 		    self.checkStatus()
 		    self.printLog(start_time,end_time)
 	return
@@ -192,11 +182,6 @@ class shutterControl(object):
         self.shutter.closeConnection(1,2)
         print "\nend sample"
         return
-
-    def userInput(self):
-	continuing = raw_input("Continue? y or n\n")
-	print "\n"
-	return continuing
 
 if __name__ == "__main__":
 	s=shutterControl()
