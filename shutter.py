@@ -119,24 +119,24 @@ class shutterControl(object):
 	    #print signal_value
 	    signal_value = self.waiting.loop()
 	    if signal_value == 1:
-	        if self.home == True:
+	        if self.home == True and self.right == True and self.open == False:
 		    print 'got signal to open from home'
 	            self.toPosRight(self.pin_r)
 		    start_time = float(self.waiting.timing(c_int(26)))
 		    self.checkStatus()
-		else:
+		elif self.home == False and self.right == False and self.open == False:
 		    print 'got signal to open from reverse home'
 		    self.toPosLeft(self.pin_l)
 		    start_time = float(self.waiting.timing(c_int(30)))
 		    self.checkStatus()
 	    else:
-		if self.right == True:
+		if self.right == True and self.home == False and self.open == True:
 		    print 'got signal to close moving right'
 		    self.toPosRight(self.pin_l)
 	            end_time = float(self.waiting.timing(c_int(31)))
 		    self.checkStatus()
 		    self.printLog(start_time,end_time)
-		else:
+		elif self.right == False and self.home == False and self.open == True:
 		    print 'got signal to close moving left'
 	            self.toPosLeft(self.pin_r)
 		    end_time = float(self.waiting.timing(c_int(27)))
