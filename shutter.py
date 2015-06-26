@@ -22,7 +22,6 @@ from ctypes import *
 class shutterControl(object):
     def __init__(self):
 	"""
-	shutter solenoids defined as pin 39, and 40 on the PC104
 	pin_l refers to the pin controlling the left shutter, pin_r the right
 	when the airhoses are located to the right of the apparatus	
 	"""
@@ -31,10 +30,9 @@ class shutterControl(object):
 	self.waiting = CDLL("./shutter_watch.so")
         self.pin_r = 76
 	self.pin_l = 77
-	self.delay = 5
-	self.hall_arr = []
+	self.delay = 2
 	current_time = strftime("%Y-%m-%d_%H:%M:%S", gmtime())
-        file = open("/root/ARCTIC/"+current_time+"logfile.txt", 'w')	
+        self.logfile = open("/root/ARCTIC/"+current_time+"logfile.txt", 'w')	
 	self.home = None
 	self.open = None
 	self.right = None	# directional variable, next motion is right when true
@@ -85,10 +83,10 @@ class shutterControl(object):
 		True if on track 1, False if on track 2.
 	"""
 	time.sleep(self.delay)
-	self.hallArrayMake()
-	print self.hall_arr
-	if self.hall_arr[3][1] == self.hall_arr[4][1]:
-	    if self.hall_arr[3][1] == 0:
+	hallArray = self.hallArrayMake()
+	print hallArray
+	if hallArray[3][1] == hallArray[4][1]:
+	    if hallArray[3][1] == 0:
 		print 'at forward home position'
 		self.home = True
 		self.open = False
@@ -122,22 +120,26 @@ class shutterControl(object):
 	    signal_value = self.waiting.loop()
 	    if signal_value == 1:
 	        if self.home == True:
+		    print 'got signal to open from home'
 	            self.toPosRight(self.pin_r)
-		    #start_time = self.waiting.timing(c_int(26))
+		    start_time = float(self.waiting.timing(c_int(26)))
 		    self.checkStatus()
 		else:
+		    print 'got signal to open from reverse home'
 		    self.toPosLeft(self.pin_l)
-		    #start_time = self.waiting.timing(30)
+		    start_time = float(self.waiting.timing(c_int(30)))
 		    self.checkStatus()
 	    else:
 		if self.right == True:
+		    print 'got signal to close moving right'
 		    self.toPosRight(self.pin_l)
-	            #end_time = self.waiting.timing(31)
+	            end_time = float(self.waiting.timing(c_int(31)))
 		    self.checkStatus()
-		    #self.printLog(start_time,end_time)
+		    self.printLog(start_time,end_time)
 		else:
+		    print 'got signal to close moving left'
 	            self.toPosLeft(self.pin_r)
-		    #end_time = self.waiting.timing(27)
+		    end_time = float(self.waiting.timing(c_int(27)))
 		    self.checkStatus()
 		    #self.printLog(start_time,end_time)
 	return
@@ -169,18 +171,19 @@ class shutterControl(object):
 	return
 
     def hallArrayMake(self):
+	hallArray = []
 	for i in range(25,33):
-	    value = self.waiting.getVal(c_int(i))
+	    value = int(self.waiting.getVal(c_int(i)))
 	    pair = [i,value]
-	    self.hall_arr.append(pair)
-	    print i, value
-	return
+	    hallArray.append(pair)
+	return hallArray
 
     def printLog(self, start_time, end_time):	
-	expTime = end_time-start_time
-	for pin in self.hall_arr:
-	    file.write("%s:%s "(pin[0],pin[1]))
-	file.write("%s\n"(expTime))
+	expTime = float(end_time-start_time)
+	hallArray = self.hallArrayMake()
+	for pin in hallArray:
+	    self.logfile.write("%s:%s"%(pin[0],pin[1]))
+	self.logfile.write("%s\n" %expTime)
 	return
 
     def close(self):
