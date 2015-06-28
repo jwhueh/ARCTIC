@@ -1,0 +1,1 @@
+Open ArcusDevice.py in Python IDE --> Run --> Enter Terminal Commands
