@@ -11,16 +11,18 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include "evgpio.h"
+#include <sys/time.h>
 
 static int pinval;
 static int pin;
 static time_t event_t;
 char buffer[80];
+struct timeval now;
 
 void print_csv(int dio, int value)
 {
-	//printf("%d,%d\n", dio, value);
-	//fflush(stdout);
+	printf("%d,%d\n", dio, value);
+	fflush(stdout);
 	pinval = evgetin(dio);
 	pin = dio;
 }
@@ -31,10 +33,16 @@ int getVal(int dio){
         return value;
 } 
 
+struct pinInfo{
+	int dio;
+	int value;
+};
+
 int loop(int dio){
         FILE *file;
 	time_t rawtime;
 	time(&rawtime); struct tm *timeinfo = localtime(&rawtime);
+	struct timeval now;
 	strftime(buffer,80,"%Y%m%d.log", timeinfo);
 	file = fopen((buffer),"a+");
 	evgpioinit();
@@ -62,7 +70,10 @@ int loop(int dio){
 			returnVal = event_t;
 		}
 	}
-	fprintf(file,"%d\t%s\t",(int)event_t,process);
+	gettimeofday(&now, NULL);
+	uint64_t event_sec = now.tv_sec;
+	uint64_t event_usec = now.tv_usec;
+	fprintf(file,"%llu\t%llu\t%s\t",(long long unsigned int) event_sec, (long long unsigned int) event_usec, process);
 	int x;
 	for(x=25; x<34; x++) {
 		fprintf(file,"%d\t",getVal((int)x));
