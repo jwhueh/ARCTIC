@@ -8,9 +8,48 @@ class Metrology(object):
 		pass
 		self.ser = None
 		self.serial = '/dev/ttyS0'
-		self.temp1 = '1C00000365971D28'
+		self.sensors=[]
 		self.delay = 0.2
+		self.start()
+		self.findTempSensors()
+		self.setupSensors()
 
+	def run(self):
+		while True:
+			fout = open('temp.log','a')
+			output=time.strftime("%Y%m%dT%H%M%S")
+			for s in self.sensors:
+				output = output+','	
+				temp = self.readTemp(s)
+				output = output+str(temp)
+			fout.write(output+'\n')
+			fout.close()
+			
+			time.sleep(10)	
+
+
+	def setupSensors(self):
+		for s in self.sensors:
+			self.setResolution(s)
+			self.readTemp(s)
+		return
+			
+
+	def findTempSensors(self):
+		self.sensors.append(self.serWrite('S\r').rstrip('\r'))
+		while True:
+			out = self.serWrite('s\r')
+			if len(out) <=3:
+                                break
+			self.sensors.append(out.rstrip('\r'))
+		print self.sensors
+		return
+
+
+	def setResolution(self,dev):
+		self.deviceSelect(dev)
+		self.serWrite('W044E4B467F')
+		self.serWrite('R')
 
 	def start(self):
 		self.ser = serial.Serial(self.serial,9600, timeout=.1)
@@ -20,11 +59,11 @@ class Metrology(object):
 		self.deviceSelect(dev)
 		self.serWrite('M')
 		self.serWrite('W0144')
-		time.sleep(3)
-		self.deviceSelect(dev)
+		time.sleep(10)
+		self.serWrite('M')
 		output = self.serWrite('W0ABEFFFFFFFFFFFFFFFFFF')
-		self.convert(output)	
-		return
+		t = self.convert(output)	
+		return t
 
 	def deviceSelect(self, dev):
 		cmd = 'A%s\r' % str(dev)
@@ -39,21 +78,16 @@ class Metrology(object):
 		self.ser.write(cmd)
 		time.sleep(self.delay)
 		out = self.ser.readline()
-		print out
 		return out
 
 	def convert(self, sig):
-		print sig
-		print sig[2:4], sig[4:6], sig[14:16], sig[16:18] 
-		lsb = int("0x%s"  % sig[2:4],0)
-		msb = int("0x%s" % sig[4:6],0)
-		rem = int("0x%s" % sig[14:16],0)
-		count = int("0x%s" % sig[16:18],0) 
-		print lsb, msb, rem, count
-		temp = (lsb - 0.25 + ((count - rem)/count))/2 
-		print temp
+		lsb = sig[2:4]
+		msb = sig[4:6]
+		lm = msb+lsb
+		temp = int('0x%s' % lm,0)/16.
+		return temp
 
 if __name__ == "__main__":
 	m = Metrology()
-	m.start()
-	m.readTemp('1C00000365971D28')
+	#m.readTemp('1C00000365971D28')
+	m.run()
