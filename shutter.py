@@ -15,9 +15,11 @@ __maintainer__ = "NA"
 __email__ = "NA"
 __status__ = "Development"
 
+from multiprocessing import Process
 import time
 from time import gmtime, strftime
 from ctypes import *
+import thread
 
 class shutterControl(object):
     def __init__(self):
@@ -39,6 +41,15 @@ class shutterControl(object):
         self.shutter.openConnection()
 	time.sleep(.1)  #I tend to sleep after opening any connection because it may have some time dependent routines it needs feedback from
 	#self.shutter.moveShutter(61,1)  #needed for initialization of PC104
+
+    def end(self):
+	while True:
+	    exit = raw_input("Exit?")
+	    print exit
+	    if not exit:
+		self.waiting.stopLoop()
+	        self.running = False
+		break
 
     def exerciseRoutine(self):
 	print "Just exercising.\n"
@@ -81,7 +92,7 @@ class shutterControl(object):
 	hallArray = self.hallArrayMake()
 	if hallArray[3][1] == hallArray[4][1]:
 	    if hallArray[3][1] == 0:
-		print 'Closed.\n'
+		print 'Closed at home.\n'
 		self.home = True
 		self.open = False
 		self.right = True
@@ -105,29 +116,20 @@ class shutterControl(object):
 	Returns:
 		None
 	'''
-	start_time = 0;
-        end_time = 0;
-
-	while self.running == True:
-	    signal_value = self.waiting.loop(c_int(33))
-	    if signal_value == 1:
-	        if self.home == True and self.right == True and self.open == False:
-	            self.toPosRight(self.pin_r)
-		    start_time = float(self.waiting.loop(c_int(26)))
-		    self.checkStatus()
-		elif self.home == False and self.right == False and self.open == False:
-		    self.toPosLeft(self.pin_l)
-		    start_time = float(self.waiting.loop(c_int(30)))
-		    self.checkStatus()
-	    else:
-		if self.right == True and self.home == False and self.open == True:
+	try:
+	    while self.running == True:
+		self.waiting.loop()
+	        if self.home == True:
+		    self.toPosRight(self.pin_r)
+		    self.waiting.loop()
 		    self.toPosRight(self.pin_l)
-	            end_time = float(self.waiting.loop(c_int(31)))
-		    self.checkStatus()
-		elif self.right == False and self.home == False and self.open == True:
-	            self.toPosLeft(self.pin_r)
-		    end_time = float(self.waiting.loop(c_int(27)))
-		    self.checkStatus()
+		else:
+		    self.toPosLeft(self.pin_l)
+		    self.waiting.loop()
+		    self.toPosLeft(self.pin_r)
+		self.checkStatus()
+	except KeyboardInterrupt:
+		pass
 	return
 
 
@@ -176,5 +178,4 @@ if __name__ == "__main__":
 	s.sendHome()
 	s.exerciseRoutine()
 	s.changeSense()
-	#file.close()
 	#s.sendHome()

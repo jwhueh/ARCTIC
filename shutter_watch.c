@@ -15,7 +15,6 @@
 
 static int pinval;
 static int pin;
-static time_t event_t;
 char buffer[80];
 struct timeval now;
 
@@ -33,52 +32,32 @@ int getVal(int dio){
         return value;
 } 
 
-struct pinInfo{
-	int dio;
-	int value;
-};
-
 int loop(int dio){
         FILE *file;
-	time_t rawtime;
-	time(&rawtime); struct tm *timeinfo = localtime(&rawtime);
-	struct timeval now;
-	strftime(buffer,80,"%Y%m%d.log", timeinfo);
-	file = fopen((buffer),"a+");
-	evgpioinit();
+        time_t rawtime;
+        time(&rawtime); struct tm *timeinfo = localtime(&rawtime);
+        struct timeval now;
+        strftime(buffer,80,"%Y%m%d.log", timeinfo);
+        file = fopen((buffer),"a+");
+        evgpioinit();
         evclrwatch();
         int waiting = 0;
-	int returnVal;
-	char *process;
-	while(waiting < 1){
-		evwatchin(print_csv);
-		if(dio == 33){
-			waiting = 1;
-			event_t = time(NULL);
-			if(pinval == 1){
-				process = "opening";
-			}
-			else{
-				process = "closing";
-			}
-			returnVal = pinval;
-		}
-		else if(dio == pin){
-			waiting = 1;
-			event_t = time(NULL);
-			process = "moving";
-			returnVal = event_t;
-		}
-	}
-	gettimeofday(&now, NULL);
-	uint64_t event_sec = now.tv_sec;
-	uint64_t event_usec = now.tv_usec;
-	fprintf(file,"%llu\t%llu\t%s\t",(long long unsigned int) event_sec, (long long unsigned int) event_usec, process);
-	int x;
-	for(x=25; x<34; x++) {
-		fprintf(file,"%d\t",getVal((int)x));
-	}
-	fprintf(file,"\n");
+        //char *process;
+        while(waiting < 1){
+                evwatchin(print_csv);
+                if(pin == 33){
+                        waiting = 1;
+                }
+        	gettimeofday(&now, NULL);
+        	uint64_t event_sec = now.tv_sec;
+        	uint64_t event_usec = now.tv_usec;
+        	fprintf(file,"%llu.%llu\t",(long long unsigned int) event_sec, (long long unsigned int) event_usec);
+        	int x;
+        	for(x=25; x<34; x++) {
+                	fprintf(file,"%d\t",getVal((int)x));
+        	}
+        	fprintf(file,"\n");
+        }
 	fclose(file);
-	return returnVal;
+        return pinval;
 }
