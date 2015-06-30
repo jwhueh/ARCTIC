@@ -1,0 +1,1 @@
+gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c -lusb-1.0 -DDEBUGARCUS
