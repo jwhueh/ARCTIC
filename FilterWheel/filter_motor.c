@@ -3,233 +3,143 @@
 gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c -lusb-1.0 -DDEBUGARCUS
 
 **/
-
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "ArcusPerformaxDriver.h"
 
-int main(void)
+
+
+char            lpDeviceString[PERFORMAX_MAX_DEVICE_STRLEN];
+AR_HANDLE       Handle; //usb handle
+char            out[64];
+char            in[64];
+AR_DWORD        num;
+int i;
+
+int main(int argc, char *argv[])
 {
-	char 		lpDeviceString[PERFORMAX_MAX_DEVICE_STRLEN];
-	AR_HANDLE	Handle; //usb handle
-	char		out[64];
-	char		in[64];
-	AR_DWORD	num;
-	int i;
-	
-	memset(out,0,64);
-	memset(in,0,64);
 
-	//acquire information
-	
-	if(!fnPerformaxComGetNumDevices(&num))
-	{
-		printf("error in fnPerformaxComGetNumDevices\n");
-		return 1;
-	}
-	if(num<1)
-	{
-		printf( "No motor found\n");
-		return 1;
-	}
+    /*display arguments, used for testing*/
+    int i = 0;
+    for (i = 0; i < argc; i++) {
+    printf("argv[%d] = %s\n", i, argv[i]);
+    }
 
-	if( !fnPerformaxComGetProductString(0, lpDeviceString, PERFORMAX_RETURN_SERIAL_NUMBER) ||
-		!fnPerformaxComGetProductString(0, lpDeviceString, PERFORMAX_RETURN_DESCRIPTION) )
-	{
-		printf("error acquiring product string\n");
-		return 1;
-	}
-	
-	//printf("device description: %s\n", lpDeviceString);
-	
-	//setup the connection
-	
-	if(!fnPerformaxComOpen(0,&Handle))
-	{
-		printf( "Error opening device\n");
-		return 1;
-	}
-	
-	if(!fnPerformaxComSetTimeouts(5000,5000))
-	{
-		printf("Error setting timeouts\n");
-		return 1;
-	}
-	if(!fnPerformaxComFlush(Handle))
-	{
-		printf("Error flushing the coms\n");
-		return 1;
-	}
-	
-	// setup the device
+    memset(out,0,64);
+    memset(in,0,64);
 
-	setup();
+    int index;
+    int c;
 
-	//exercise();
+    setup(); //start the communications
 
-	move("500","X");	
-	
+    while ((c = getopt (argc, argv, "epmto")) != -1)
+        switch (c)
+	    {
+	    if(argc==1){
+	        case 'e':
+        	    exercise(); 
+		    break;
 
+	        case 'p':
+		    currentPos();
+		    break;
+
+	        case 't':
+		    printf("test\n");
+	  	    break;
+		case 'o':
+		    turnOff();
+		    break;
+		case '?':
+         	    if (isprint (optopt))
+           	        fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+         	    else
+           		fprintf (stderr,
+                        "Unknown option character `\\x%x'.\n",
+                        optopt);
+			return 1;
+       			default:
+         		abort ();
+	    }
+	    if(argc==2){
+		case 'm':
+                    printf("%s\n", argv[2]);
+                    moveMotor(argv[2]);
+		    return;
+                    break;
+		}
+       	     }
 }
 
-int move(char* mvm, char* cmdc){
+int moveMotor(char *mv){
+	char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
-	char mv[12] = mvm;
-	char cmd[12] = cmdc;
-	
-        AR_HANDLE       Handle; //usb handle
-        char            out[64];
-        char            in[64];
-        
         strcat(cmd, mv);
-	printf(cmd);
         strcpy(out, cmd); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
                         return 1;
                  }      
+	/* check the motor position and make sure it completes a move
+	* should probably add some error checking at some point
+	*/
         while(strcmp(mv, in)!=0){
-        strcpy(out, "PX"); //move the motor
+        strcpy(out, "PX");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
                         return 1;
                  }
-
-        printf ("Position: %s, Move: %s\n", in, mv);
+        printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
         sleep(1);
         }
-
-
+	return 1;
 }
 
 
 int exercise(){
-
-	AR_HANDLE       Handle; //usb handle
-        char            out[64];
-        char            in[64];
-
-
+	/* move the motor around to make sure everything is working */
 	printf("Motor is moving. Please wait.\n");
 
-        char mv[12] = "10000";
-        char cmd[12] = "X";
-        strcat(cmd, mv);
-        strcpy(out, cmd); //move the motor
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-        while(strcmp(mv, in)!=0){
-        strcpy(out, "PX"); //move the motor
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
+        char mv[12] = "20000";
+	moveMotor(mv);
 
-        printf ("Position: %s, Move: %s\n", in, mv);
-        sleep(1);
-        }
+        char mn[12] = "-20000";
+	moveMotor(mn);
 
-        char mn[12] = "-10000";
-        char cmdn[12] = "X";
-        strcat(cmdn, mn);
-        strcpy(out, cmdn); //move the motor
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-        while(strcmp(mn, in)!=0){
-        strcpy(out, "PX"); //move the motor
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-
-        printf ("Position: %s, Move: %s\n", in, mn);
-        sleep(1);
-        }
-
-
-
+	return 1;
 }
 
-
-int setup(){
-
-
-	AR_HANDLE       Handle; //usb handle
-        char            out[64];
-        char            in[64];
-
-	memset(out,0,64);
-        memset(in,0,64);
-
-
-	strcpy(out, "LSPD=300"); //set low speed
+int currentPos(){
+	/* return current position as determined by the motor encoder */
+	strcpy(out, "PX");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
-        strcpy(out, "HSPD=3000"); //set high speed
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-	/* This seems to be an unknown command in the current firmware...
-        strcpy(out, "CUR=500"); //set current
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }*/
-
-        strcpy(out, "POL=0"); //set polarity on the limit switch to be positive
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        strcpy(out, "ACC=300"); //set acceleration
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        strcpy(out, "EO=1"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-        // Incremental mode no longer appears to be supported...
-        strcpy(out, "ABS"); //set incremental mode
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        strcpy(out, "EX=0"); //read current
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
         printf("Current Encoder Value: %s\n",in);
+	return 1;
+}
 
+int turnOff(){
+	/* Turn off motor current */
+	strcpy(out, "EO=0"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }      
+	return 1;
+}
+
+int info(){
+	/* return the motor information */
         strcpy(out, "ID"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -248,6 +158,79 @@ int setup(){
 
         printf("Device Number: %s\n",in);
 
+	return 1;
+}
+
+int setVelocity(){
+	/* set the speed and ramp parameters
+	*Low Speed and high speed define the path generation velocity.  
+	*Weird things can heppen if they are really high (motor stalls kinda).
+	*/
+
+        strcpy(out, "LSPD=30000"); //set low speed (original value 1000)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        strcpy(out, "HSPD=40000"); //set high speed (original value 10000)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        strcpy(out, "ACC=200"); //set acceleration (original value 300)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+	return 1;
+}
+
+
+int setup(){
+	/* setup communications to the device */
+	memset(out,0,64);
+        memset(in,0,64);
+
+        if(!fnPerformaxComGetNumDevices(&num))
+        {
+                printf("error in fnPerformaxComGetNumDevices\n");
+                return 1;
+        }
+        if(num<1)
+        {
+                printf( "No motor found\n");
+                return 1;
+        }
+
+        if(!fnPerformaxComOpen(0,&Handle))
+        {
+                printf( "Error opening device\n");
+                return 1;
+        }
+
+        if(!fnPerformaxComSetTimeouts(500,500))
+        {
+                printf("Error setting timeouts\n");
+                return 1;
+        }
+        if(!fnPerformaxComFlush(Handle))
+        {
+                printf("Error flushing the coms\n");
+                return 1;
+        }
+
+        strcpy(out, "EO=1"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
         strcpy(out, "CLR"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -256,16 +239,5 @@ int setup(){
         }
 
         printf("Clear Errors: %s\n",in);
-
-
-        strcpy(out, "POL"); //read current
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        printf("Current Polarity: %s\n",in);
-
 
 }
