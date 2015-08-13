@@ -1,2 +1,0 @@
-gcc -Wall -fPIC -c shutter_watch.c
-gcc -shared -Wl,-soname,libshutter_watch.so.1 -o shutter_watch.so shutter_watch.o evgpio.c -mcpu=arm9
