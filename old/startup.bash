@@ -1,0 +1,22 @@
+./evgpioctl -o 77
+./evgpioctl -o 76
+./evgpioctl -l 61
+./evgpioctl -a
+./evgpioctl -m 25
+./evgpioctl -i 25
+./evgpioctl -m 26
+./evgpioctl -i 26
+./evgpioctl -m 27
+./evgpioctl -i 27
+./evgpioctl -m 28
+./evgpioctl -i 28
+./evgpioctl -m 29
+./evgpioctl -i 29
+./evgpioctl -m 30
+./evgpioctl -i 30
+./evgpioctl -m 31
+./evgpioctl -i 31
+./evgpioctl -m 32
+./evgpioctl -i 32
+./evgpioctl -m 33
+./evgpioctl -i 33

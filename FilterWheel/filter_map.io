@@ -12,25 +12,16 @@ to test evgpio use command ./evgpioctl -w
 
 	PC104 Assignment	EVGPIO Assignment
 
-Hall 1:
-	ISA_DAT_00	25
-	ISA_DAT_01	26
-	ISA_DAT_02	27
-	ISA_DAT_03	28
+FilterWheel Hall:
+	ISA_DAT_11	36
+	ISA_DAT_12	37
+	ISA_DAT_13	38
+	ISA_DAT_14	39
+	ISA_DAT_15      40
 
-Hall 2:	
-	ISA_DAT_04	29
-	ISA_DAT_05	30
-	ISA_DAT_06	31
-	ISA_DAT_07	32
+Detent Switches:	
+	DIO_11		81
+	DIO_13		82
 
-TTL From Leach:
-	ISA_DAT_08	33
-
-Spare:
-	ISA_DAT_09	34
-	ISA_DAT_10	35
-
-Valve:
-	DIO_01		76
-	DIO_03		77
+Solenoid:
+	DIO_15		83
