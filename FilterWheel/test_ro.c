@@ -1,3 +1,8 @@
+/**
+gcc -o exercise_motor test_ro.c ArcusPerformaxDriver.c -lusb-1.0 -DDEBUGARCUS
+
+**/
+
 #include <stdio.h>
 #include <string.h>
 #include "ArcusPerformaxDriver.h"
