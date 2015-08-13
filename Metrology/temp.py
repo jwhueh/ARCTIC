@@ -3,20 +3,22 @@
 import serial
 import time
 
+"""Make it so that the temp sensors are read from file but at the same time the file can be updated with routine"""
+
 class Metrology(object):
 	def __init__(self):
 		pass
 		self.ser = None
 		self.serial = '/dev/ttyS0'
 		self.sensors=[]
-		self.delay = 0.2
+		self.delay = 0.5
 		self.start()
 		self.findTempSensors()
 		self.setupSensors()
 
 	def run(self):
 		while True:
-			fout = open('temp.log','a')
+			fout = open(time.strftime("%Y%m%d.temp"),'a')
 			output=time.strftime("%Y%m%dT%H%M%S")
 			for s in self.sensors:
 				output = output+','	
@@ -52,7 +54,7 @@ class Metrology(object):
 		self.serWrite('R')
 
 	def start(self):
-		self.ser = serial.Serial(self.serial,9600, timeout=.1)
+		self.ser = serial.Serial(self.serial,9600, timeout=.5)
 		return
 
 	def readTemp(self, dev):
@@ -89,5 +91,5 @@ class Metrology(object):
 
 if __name__ == "__main__":
 	m = Metrology()
-	#m.readTemp('1C00000365971D28')
+	#m.readTemp('0FFCDBE0000F2FBA')
 	m.run()
