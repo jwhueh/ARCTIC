@@ -1,6 +1,6 @@
 /**
 
-gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c -lusb-1.0 -DDEBUGARCUS
+gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c evgpio.c -lusb-1.0 -mcpu=arm9
 
 **/
 #include <ctype.h>
@@ -220,6 +220,31 @@ int setup(){
 	/* setup communications to the device */
 	memset(out,0,64);
         memset(in,0,64);
+
+
+	/* setup gpio */
+
+	evgpioinit();
+        evsetddr(81,0);
+        evsetddr(82,0);
+	evsetddr(83,1);
+        evsetdata(61,0);
+        int i;
+        for(i=36;i<41;i++){
+                evsetmask(i,1);
+                evgetin(i);
+        }
+        sleep(1);
+        evclrwatch();
+
+	/* current values */
+
+	int x;
+	for(x=36; x<41; x++) {
+        	int value = evgetin((int)x);
+                printf("%d\t",value);
+        }
+	printf("\n");
 
         if(!fnPerformaxComGetNumDevices(&num))
         {
