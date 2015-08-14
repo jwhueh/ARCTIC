@@ -76,6 +76,14 @@ int main(int argc, char *argv[])
 }
 
 int moveMotor(char *mv){
+	strcpy(out, "EO=1"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+	
+
 	char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
         strcat(cmd, mv);
@@ -98,6 +106,13 @@ int moveMotor(char *mv){
         printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
         sleep(1);
         }
+	strcpy(out, "EO=0"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
 	return 1;
 }
 
@@ -135,6 +150,16 @@ int turnOff(){
                 printf("Could not send\n");
                 return 1;
         }      
+
+	sleep(1);
+	strcpy(out, "EO"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+	printf("Motor State is %s\n",in);
+
 	return 1;
 }
 
@@ -221,13 +246,6 @@ int setup(){
         if(!fnPerformaxComFlush(Handle))
         {
                 printf("Error flushing the coms\n");
-                return 1;
-        }
-
-        strcpy(out, "EO=1"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
                 return 1;
         }
 
