@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     setup(); //start the communications
 
-    while ((c = getopt (argc, argv, "epmto")) != -1)
+    while ((c = getopt (argc, argv, "epmtoz")) != -1)
         switch (c)
 	    {
 	    if(argc==1){
@@ -53,6 +53,9 @@ int main(int argc, char *argv[])
 	  	    break;
 		case 'o':
 		    turnOff();
+		    break;
+		case 'z':
+		    home();
 		    break;
 		case '?':
          	    if (isprint (optopt))
@@ -142,6 +145,21 @@ int currentPos(){
 	return 1;
 }
 
+int home(){
+        /* return current position as determined by the motor encoder */
+        strcpy(out, "PX=0");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+	printf("Encoder Value Set to 0\n");
+	
+	currentPos();
+
+        return 1;
+}
+
 int turnOff(){
 	/* Turn off motor current */
 	strcpy(out, "EO=0"); //enable device
@@ -163,6 +181,29 @@ int turnOff(){
 	return 1;
 }
 
+int turnOn(){
+        /* Turn off motor current */
+        strcpy(out, "EO=1"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        sleep(1);
+        strcpy(out, "EO"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        printf("Motor State is %s\n",in);
+
+        return 1;
+}
+
+
+
 int info(){
 	/* return the motor information */
         strcpy(out, "ID"); //read current
@@ -183,6 +224,46 @@ int info(){
 
         printf("Device Number: %s\n",in);
 
+        strcpy(out, "ABS"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        printf("BOOT: %s\n",in);
+
+
+	strcpy(out, "EDIO=0"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        printf("Device Number: %s\n",in);
+
+
+        strcpy(out, "POL=1"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        printf("Device Number: %s\n",in);
+
+        strcpy(out, "IERR=1"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        printf("Device Number: %s\n",in);
+
+
+
 	return 1;
 }
 
@@ -192,7 +273,7 @@ int setVelocity(){
 	*Weird things can heppen if they are really high (motor stalls kinda).
 	*/
 
-        strcpy(out, "LSPD=30000"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=10000"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -206,7 +287,7 @@ int setVelocity(){
                 return 1;
         }
 
-        strcpy(out, "ACC=200"); //set acceleration (original value 300)
+        strcpy(out, "ACC=300"); //set acceleration (original value 300)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -224,7 +305,7 @@ int setup(){
 
 	/* setup gpio */
 
-	evgpioinit();
+	/*evgpioinit();
         evsetddr(81,0);
         evsetddr(82,0);
 	evsetddr(83,1);
@@ -236,15 +317,16 @@ int setup(){
         }
         sleep(1);
         evclrwatch();
-
+	*/
 	/* current values */
-
+	/*
 	int x;
 	for(x=36; x<41; x++) {
         	int value = evgetin((int)x);
                 printf("%d\t",value);
         }
 	printf("\n");
+	*/
 
         if(!fnPerformaxComGetNumDevices(&num))
         {
@@ -282,5 +364,6 @@ int setup(){
         }
 
         printf("Clear Errors: %s\n",in);
-
+	setVelocity();
+	info();
 }
