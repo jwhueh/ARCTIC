@@ -18,6 +18,8 @@ char            out[64];
 char            in[64];
 AR_DWORD        num;
 int i;
+static int pin;
+static int pinval;
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
 
     setup(); //start the communications
 
-    while ((c = getopt (argc, argv, "epmtoz")) != -1)
+    while ((c = getopt (argc, argv, "epmtozh")) != -1)
         switch (c)
 	    {
 	    if(argc==1){
@@ -55,8 +57,11 @@ int main(int argc, char *argv[])
 		    turnOff();
 		    break;
 		case 'z':
-		    home();
+		    zero();
 		    break;
+		case 'h':
+                    home();
+                    break;
 		case '?':
          	    if (isprint (optopt))
            	        fprintf (stderr, "Unknown option `-%c'.\n", optopt);
@@ -76,6 +81,13 @@ int main(int argc, char *argv[])
                     break;
 		}
        	     }
+}
+
+void print_csv(int dio, int value){
+        printf("%d,%d\n", dio, value);
+        fflush(stdout);
+        pinval = evgetin(dio);
+        pin = dio;
 }
 
 int moveMotor(char *mv){
@@ -99,6 +111,9 @@ int moveMotor(char *mv){
 	/* check the motor position and make sure it completes a move
 	* should probably add some error checking at some point
 	*/
+
+        evclrwatch();
+
         while(strcmp(mv, in)!=0){
         strcpy(out, "PX");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -145,7 +160,7 @@ int currentPos(){
 	return 1;
 }
 
-int home(){
+int zero(){
         /* return current position as determined by the motor encoder */
         strcpy(out, "PX=0");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -273,21 +288,21 @@ int setVelocity(){
 	*Weird things can heppen if they are really high (motor stalls kinda).
 	*/
 
-        strcpy(out, "LSPD=10000"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=5000"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=40000"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=30000"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "ACC=300"); //set acceleration (original value 300)
+        strcpy(out, "ACC=100"); //set acceleration (original value 300)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -295,6 +310,139 @@ int setVelocity(){
         }
 	return 1;
 }
+
+int homeVelocity(){
+	 /* set the speed and ramp parameters
+        *Low Speed and high speed define the path generation velocity.
+        *Weird things can heppen if they are really high (motor stalls kinda).
+        */
+
+        strcpy(out, "LSPD=100"); //set low speed (original value 1000)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        strcpy(out, "HSPD=500"); //set high speed (original value 10000)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
+        strcpy(out, "ACC=50"); //set acceleration (original value 300)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        return 1;
+}
+
+
+
+int home(){
+	strcpy(out, "EO=1"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+	//homeVelocity();
+        
+	char mv[12] = "400000";
+        //char mv[12]="-10000"; 
+        char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
+
+        strcat(cmd, mv);
+        strcpy(out, cmd); //move the motor
+                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                {
+                        printf("Could not send\n");
+                        return 1;
+                 }      
+        /* check the motor position and make sure it completes a move
+        * should probably add some error checking at some point
+        */              
+                 
+        evclrwatch();
+        
+        while(1){
+                evwatchin(print_csv);
+                printf("%d\n", pin);
+                if(pin == 37 || pin == 38 || pin == 39){
+                        currentPos();
+                        printf("around home\n");
+			strcpy(out, "STOP");
+        		if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                	{
+                        	printf("Could not send\n");
+                        	return 1;
+                 	}
+			sleep(1);
+			zero();
+			printf("determining home center\n");
+			sleep(1);
+			findHysteresis();
+			turnOff();
+			return 1;      
+                 }
+		if(pin == 36){
+                        currentPos();
+                        printf("at filter position\n");
+                        int x;
+                for(x=36; x<40; x++) {
+                        int value = evgetin((int)x);
+                        printf("%d\t",value);
+                }
+                printf("\n");
+	
+		}
+        strcpy(out, "PX");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                {       
+                        printf("Could not send\n");
+                        return 1;
+                 }
+        printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
+        }               
+        strcpy(out, "EO=0"); //enable device
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in)) 
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        
+        return 1;
+} 
+
+int findHysteresis(){
+	int end = 1;
+	homeVelocity();
+	strcpy(out, "X-10000"); //move the motor
+                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                {
+                        printf("Could not send\n");
+                        return 1;
+                 }
+	evclrwatch();	
+        evwatchin(print_csv);
+                printf("%d\n", pin);
+                if(pin ==36 || pin == 37 || pin == 38 || pin == 39){
+                        currentPos();
+			strcpy(out, "STOP");
+                        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                        {
+                                printf("Could not send\n");
+                                return 1;
+                        }
+
+                        printf("around Neg home\n");
+			sleep(1);
+		}
+	return 1;
+} 
 
 
 int setup(){
@@ -305,7 +453,7 @@ int setup(){
 
 	/* setup gpio */
 
-	/*evgpioinit();
+	evgpioinit();
         evsetddr(81,0);
         evsetddr(82,0);
 	evsetddr(83,1);
@@ -317,16 +465,15 @@ int setup(){
         }
         sleep(1);
         evclrwatch();
-	*/
+	
 	/* current values */
-	/*
+	
 	int x;
 	for(x=36; x<41; x++) {
         	int value = evgetin((int)x);
                 printf("%d\t",value);
         }
 	printf("\n");
-	*/
 
         if(!fnPerformaxComGetNumDevices(&num))
         {
@@ -365,5 +512,5 @@ int setup(){
 
         printf("Clear Errors: %s\n",in);
 	setVelocity();
-	info();
+	//info();
 }
