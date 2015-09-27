@@ -20,9 +20,11 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
+int currentFilter;
 
 int main(int argc, char *argv[])
 {
+
 
     /*display arguments, used for testing*/
     int i = 0;
@@ -35,10 +37,11 @@ int main(int argc, char *argv[])
 
     int index;
     int c;
+    int currentFilter = 1;
 
     setup(); //start the communications
 
-    while ((c = getopt (argc, argv, "epmtozh")) != -1)
+    while ((c = getopt (argc, argv, "epmftozh")) != -1)
         switch (c)
 	    {
 	    if(argc==1){
@@ -79,6 +82,12 @@ int main(int argc, char *argv[])
                     moveMotor(argv[2]);
 		    return;
                     break;
+		case 'f':
+                    printf("%s\n", argv[2]);
+                    moveToFilter(atoi(argv[2]));
+                    return;
+                    break;
+	
 		}
        	     }
 }
@@ -130,6 +139,37 @@ int moveMotor(char *mv){
                 printf("Could not send\n");
                 return 1;
         }
+
+	return 1;
+}
+
+int moveToFilter(int pos){
+	strcpy(out, "PX");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        printf("Current Encoder Value: %s\n",in);
+
+	int incmv = 34000;
+
+	int cF = atoi(in) / incmv;
+
+	int toMove = pos - cF;
+	printf("current position: %d, desired position: %d, filter positions to move: %d\n", cF, pos, toMove);
+	
+
+	int pxmv = incmv*toMove +atoi(in);
+
+	printf("encoder steps to move: %d\n", pxmv);
+
+	char c[20];
+
+	sprintf(c, "%d", pxmv);
+	moveMotor(c);
+
+	currentFilter = pos;
 
 	return 1;
 }
@@ -385,6 +425,7 @@ int home(){
 			printf("determining home center\n");
 			sleep(1);
 			findHysteresis();
+			zero();
 			turnOff();
 			return 1;      
                  }
@@ -463,7 +504,7 @@ int setup(){
                 evsetmask(i,1);
                 evgetin(i);
         }
-        sleep(1);
+        sleep(.1);
         evclrwatch();
 	
 	/* current values */
