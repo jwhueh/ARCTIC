@@ -152,7 +152,7 @@ int moveToFilter(int pos){
         }
         printf("Current Encoder Value: %s\n",in);
 
-	int incmv = 34000;
+	int incmv = 34140;
 
 	int cF = atoi(in) / incmv;
 
@@ -357,14 +357,14 @@ int homeVelocity(){
         *Weird things can heppen if they are really high (motor stalls kinda).
         */
 
-        strcpy(out, "LSPD=100"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=1000"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=500"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=5000"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -391,7 +391,7 @@ int home(){
         }
 	//homeVelocity();
         
-	char mv[12] = "400000";
+	char mv[12] = "410000";
         //char mv[12]="-10000"; 
         char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
@@ -425,10 +425,21 @@ int home(){
 			printf("determining home center\n");
 			sleep(1);
 			findHysteresis();
-			zero();
+		
+			strcpy(out, "PX=700");
+		        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+                	{
+                        printf("Could not send\n");
+                        return 1;
+                 	}
+        		printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
+
+			moveMotor("0");
+
 			turnOff();
 			return 1;      
                  }
+		}
 		if(pin == 36){
                         currentPos();
                         printf("at filter position\n");
@@ -447,7 +458,7 @@ int home(){
                         return 1;
                  }
         printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
-        }               
+        //}               
         strcpy(out, "EO=0"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in)) 
         {
@@ -461,7 +472,7 @@ int home(){
 int findHysteresis(){
 	int end = 1;
 	homeVelocity();
-	strcpy(out, "X-10000"); //move the motor
+	strcpy(out, "X-20000"); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
@@ -478,7 +489,6 @@ int findHysteresis(){
                                 printf("Could not send\n");
                                 return 1;
                         }
-
                         printf("around Neg home\n");
 			sleep(1);
 		}
