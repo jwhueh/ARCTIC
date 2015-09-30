@@ -22,13 +22,14 @@ class FilterWheel(object):
 		id_binary = self.filter.home()
 		self.id = int(str(id_binary),2)
 		print "Filter ID: %s, %s" % (id_binary, self.id)
-		return
+		return self.id
 
 	def stop(self):
 		"""
 		stop filter wheel motion
 		"""
-		pass
+		self.filter.stopMotor()
+		return
 
 	def moveToPosition(self, pos):
 		"""
@@ -48,17 +49,19 @@ class FilterWheel(object):
 		"""
 		return current status of filter wheel
 		"""
-		encPos = self.filter.currentPos()
-		motorPower = self.filter.motorStatus()
-		hall = self.filter.hallStatus()	
+		dict = {'id':self.id,'encoder':None, 'motor':None, 'hall':None}
+		dict['encoder']  = self.filter.currentPos()
+		dict['motor'] = self.filter.motorStatus()
+		hall = self.filter.hallStatus()
+		dict['hall'] = str(hall).zfill(4)
 
-		print encPos, motorPower, str(hall).zfill(4)
-		return
+		print dict
+		return dict
 
 
 if __name__ == "__main__":
 	f = FilterWheel()
 	f.setup()
-	#f.home()
+	f.home()
 	#f.moveToPosition(6)
 	f.status()
