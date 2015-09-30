@@ -20,50 +20,41 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
-int currentFilter;
 
 int main(int argc, char *argv[])
 {
 
-
-    /*display arguments, used for testing*/
-    int i = 0;
-    for (i = 0; i < argc; i++) {
-    printf("argv[%d] = %s\n", i, argv[i]);
-    }
 
     memset(out,0,64);
     memset(in,0,64);
 
     int index;
     int c;
-    int currentFilter = 1;
 
     setup(); //start the communications
 
-    while ((c = getopt (argc, argv, "epmftozh")) != -1)
+    while ((c = getopt (argc, argv, "pmftoiczh")) != -1)
         switch (c)
 	    {
 	    if(argc==1){
-	        case 'e':
-        	    exercise(); 
-		    break;
-
 	        case 'p':
 		    currentPos();
 		    break;
-
 	        case 't':
 		    printf("test\n");
 	  	    break;
 		case 'o':
-		    turnOff();
+		    motorOff();
+		    break;
+		case 'c':
+		    readConfig();
 		    break;
 		case 'z':
 		    zero();
 		    break;
-		case 'h':
-                    home();
+		case 'h':;
+                    int retStr = home();
+		    printf("Filter ID: %d\n", retStr);
                     break;
 		case '?':
          	    if (isprint (optopt))
@@ -100,14 +91,11 @@ void print_csv(int dio, int value){
 }
 
 int moveMotor(char *mv){
-	strcpy(out, "EO=1"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-	
+	/*
+	Move the motor to absolute encoder position.
+	*/
 
+	motorOn();
 	char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
         strcat(cmd, mv);
@@ -117,29 +105,7 @@ int moveMotor(char *mv){
                         printf("Could not send\n");
                         return 1;
                  }      
-	/* check the motor position and make sure it completes a move
-	* should probably add some error checking at some point
-	*/
-
-        evclrwatch();
-
-        while(strcmp(mv, in)!=0){
-        strcpy(out, "PX");
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-        printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
-        sleep(1);
-        }
-	strcpy(out, "EO=0"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
+	motorOff();
 	return 1;
 }
 
@@ -169,24 +135,9 @@ int moveToFilter(int pos){
 	sprintf(c, "%d", pxmv);
 	moveMotor(c);
 
-	currentFilter = pos;
-
 	return 1;
 }
 
-
-int exercise(){
-	/* move the motor around to make sure everything is working */
-	printf("Motor is moving. Please wait.\n");
-
-        char mv[12] = "20000";
-	moveMotor(mv);
-
-        char mn[12] = "-20000";
-	moveMotor(mn);
-
-	return 1;
-}
 
 int currentPos(){
 	/* return current position as determined by the motor encoder */
@@ -196,7 +147,7 @@ int currentPos(){
                 printf("Could not send\n");
                 return 1;
         }
-        printf("Current Encoder Value: %s\n",in);
+        printf("%s\n",in);
 	return 1;
 }
 
@@ -215,16 +166,16 @@ int zero(){
         return 1;
 }
 
-int turnOff(){
-	/* Turn off motor current */
+int motorOff(){
+	/* Turn OFF motor current */
 	strcpy(out, "EO=0"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }      
-
-	sleep(1);
+	/*
+	sleep(.1);
 	strcpy(out, "EO"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -232,12 +183,12 @@ int turnOff(){
                 return 1;
         }
 	printf("Motor State is %s\n",in);
-
+	*/
 	return 1;
 }
 
-int turnOn(){
-        /* Turn off motor current */
+int motorOn(){
+        /* Turn ON motor current */
         strcpy(out, "EO=1"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -245,14 +196,14 @@ int turnOn(){
                 return 1;
         }
 
-        sleep(1);
-        strcpy(out, "EO"); //enable device
+        sleep(.1);
+        /*strcpy(out, "EO"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
-        printf("Motor State is %s\n",in);
+        printf("Motor State is %s\n",in);*/
 
         return 1;
 }
@@ -380,6 +331,28 @@ int homeVelocity(){
         return 1;
 }
 
+int readConfig(){
+
+	char arra[10][100];
+	char c[1000];
+	char file_name[] = "fw.conf";
+   	FILE *fp;
+	fp = fopen(file_name,"r"); // read mode
+ 
+   	if( fp == NULL )
+   	{
+      		perror("Error while opening the file.\n");
+      		exit(EXIT_FAILURE);
+   	}
+ 
+   	printf("The contents of %s file are :\n", file_name);
+
+	fscanf(fp,"%[^\n]",c);
+   	printf("Data from file:\n%s",c);
+   	fclose(fp);
+ 
+  	return 0;
+	}
 
 
 int home(){
@@ -389,109 +362,103 @@ int home(){
                 printf("Could not send\n");
                 return 1;
         }
-	//homeVelocity();
         
-	char mv[12] = "410000";
-        //char mv[12]="-10000"; 
-        char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
-
-        strcat(cmd, mv);
-        strcpy(out, cmd); //move the motor
+        strcpy(out, "X410000"); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
                         return 1;
                  }      
-        /* check the motor position and make sure it completes a move
-        * should probably add some error checking at some point
-        */              
                  
         evclrwatch();
-        
+
+        //change this to a timed loop
         while(1){
                 evwatchin(print_csv);
-                printf("%d\n", pin);
                 if(pin == 37 || pin == 38 || pin == 39){
-                        currentPos();
-                        printf("around home\n");
 			strcpy(out, "STOP");
         		if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 	{
                         	printf("Could not send\n");
                         	return 1;
                  	}
+			sleep(2);
+			currentPos();
 			sleep(1);
 			zero();
-			printf("determining home center\n");
+			printf("Zeroed near home\n");
 			sleep(1);
 			findHysteresis();
-		
-			strcpy(out, "PX=700");
+			sleep(1);
+			//readConfig();	
+			strcpy(out, "PX=700");  //offset
 		        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 	{
-                        printf("Could not send\n");
-                        return 1;
+                        	printf("Could not send\n");
+                        	return 1;
                  	}
-        		printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
-
+			char idi[4];
+			char  v[1];
+			int x;
+                 	for(x=37; x<40; x++) {
+                        	int value = evgetin((int)x);
+				if (value == 0){
+					strcpy(v,"1");
+				} else{
+					strcpy(v,"0");
+				}
+				strcat(idi, v);
+			}
 			moveMotor("0");
+			sleep(1);
+			printf("Current Position: ");
+			currentPos();
+			printf("\n");
 
-			turnOff();
-			return 1;      
+			return atoi(idi);      
                  }
 		}
-		if(pin == 36){
-                        currentPos();
-                        printf("at filter position\n");
-                        int x;
-                for(x=36; x<40; x++) {
-                        int value = evgetin((int)x);
-                        printf("%d\t",value);
-                }
-                printf("\n");
-	
-		}
-        strcpy(out, "PX");
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {       
-                        printf("Could not send\n");
-                        return 1;
-                 }
-        printf ("Position: %s, Move: %s\n", in, mv); //this can be removed in final version
-        //}               
-        strcpy(out, "EO=0"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in)) 
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-        
-        return 1;
+        return -1;
 } 
 
 int findHysteresis(){
+	// change this code to use the current position paramter
 	int end = 1;
+	motorOn();
 	homeVelocity();
-	strcpy(out, "X-20000"); //move the motor
+	sleep(1);
+	strcpy(out, "X-5000"); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
                         return 1;
                  }
-	evclrwatch();	
+	
+	evclrwatch();
+	while(end){	
         evwatchin(print_csv);
-                printf("%d\n", pin);
-                if(pin ==36 || pin == 37 || pin == 38 || pin == 39){
-                        currentPos();
+		int x;
+		 for(x=36; x<40; x++) {
+                        int value = evgetin((int)x);
+                        printf("%d\t",value);
+                }
+                printf("\n");
+                if(pin == 39){
 			strcpy(out, "STOP");
+			end = 0;
                         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                         {
                                 printf("Could not send\n");
                                 return 1;
                         }
-                        printf("around Neg home\n");
-			sleep(1);
+			sleep(.1);
 		}
+	}
+	printf("negative limit: ");
+	currentPos();
+        printf("\n");
+	sleep(1);
+
 	return 1;
 } 
 
@@ -509,22 +476,26 @@ int setup(){
         evsetddr(82,0);
 	evsetddr(83,1);
         evsetdata(61,0);
+
+	
         int i;
         for(i=36;i<41;i++){
                 evsetmask(i,1);
                 evgetin(i);
         }
+
         sleep(.1);
         evclrwatch();
 	
 	/* current values */
-	
+	/* the following needs to be added to the status routine
 	int x;
 	for(x=36; x<41; x++) {
         	int value = evgetin((int)x);
                 printf("%d\t",value);
         }
 	printf("\n");
+	*/
 
         if(!fnPerformaxComGetNumDevices(&num))
         {
