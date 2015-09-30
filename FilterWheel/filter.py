@@ -41,7 +41,7 @@ class FilterWheel(object):
 			1 - succeed
 			-1 - unknown
 		"""
-		status = self.filter.moveToFilter(pos)
+		status = self.filter.moveToFilter(int(pos))
 		print "Filter Wheel Move Status: %s" % str(status)
 		return status
 
@@ -49,8 +49,9 @@ class FilterWheel(object):
 		"""
 		return current status of filter wheel
 		"""
-		dict = {'id':self.id,'encoder':None, 'motor':None, 'hall':None}
+		dict = {'id':self.id,'encoder':None, 'power':None,'motor':None, 'hall':None}
 		dict['encoder']  = self.filter.currentPos()
+		dict['power'] = self.filter.driverStatus()
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
@@ -62,6 +63,6 @@ class FilterWheel(object):
 if __name__ == "__main__":
 	f = FilterWheel()
 	f.setup()
-	f.home()
-	#f.moveToPosition(6)
+	#f.home()
+	f.moveToPosition(1)
 	f.status()

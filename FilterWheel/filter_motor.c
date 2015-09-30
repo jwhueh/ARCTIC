@@ -109,15 +109,35 @@ int moveMotor(char *mv){
 	return 1;
 }
 
-int motorStatus(){
+int stopMotor(){
+        strcpy(out, "STOP");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return -1;
+        }       
+        return 1;
+}
+
+int driverStatus(){
 	strcpy(out, "EO");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
-        //printf("Motor Driver Status: %s\n",in);
 	return atoi(in);
+
+}
+
+int motorStatus(){
+        strcpy(out, "MST");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        return atoi(in);
 
 }
 
