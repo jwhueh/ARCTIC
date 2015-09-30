@@ -7,7 +7,7 @@ class FilterWheel(object):
 	def __init__(self):
 		self.filter = CDLL("./filter_motor.so")
 		self.id = 0
-		self.filter = None
+		self.fw = None
 
 	def setup(self):
 		"""
@@ -44,7 +44,7 @@ class FilterWheel(object):
 		"""
 		status = self.filter.moveToFilter(int(pos))
 		print "Filter Wheel Move Status: %s" % str(status)
-		self.filter = status
+		self.fw = status
 		return status
 
 	def status(self):
