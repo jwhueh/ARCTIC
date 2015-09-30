@@ -57,7 +57,7 @@ class FilterWheel(object):
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
-
+		dict['position'] = self.fw
 		print dict
 		return dict
 
