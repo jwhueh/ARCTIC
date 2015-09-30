@@ -166,7 +166,7 @@ int moveToFilter(int pos){
 	sprintf(c, "%d", pxmv);
 	moveMotor(c);
 
-	return 1;
+	return pos;
 }
 
 

@@ -7,6 +7,7 @@ class FilterWheel(object):
 	def __init__(self):
 		self.filter = CDLL("./filter_motor.so")
 		self.id = 0
+		self.filter = None
 
 	def setup(self):
 		"""
@@ -43,13 +44,14 @@ class FilterWheel(object):
 		"""
 		status = self.filter.moveToFilter(int(pos))
 		print "Filter Wheel Move Status: %s" % str(status)
+		self.filter = status
 		return status
 
 	def status(self):
 		"""
 		return current status of filter wheel
 		"""
-		dict = {'id':self.id,'encoder':None, 'power':None,'motor':None, 'hall':None}
+		dict = {'id':self.id,'encoder':None, 'power':None,'motor':None, 'hall':None, 'position':None}
 		dict['encoder']  = self.filter.currentPos()
 		dict['power'] = self.filter.driverStatus()
 		dict['motor'] = self.filter.motorStatus()
