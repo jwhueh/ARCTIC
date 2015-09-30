@@ -166,9 +166,15 @@ int moveToFilter(int pos){
 	sprintf(c, "%d", pxmv);
 	moveMotor(c);
 
-	return pos;
+	return pxmv;
 }
 
+int filterPos(){
+	int pos = currentPos();
+	int incmv = 34140;
+	int fw = pos/incmv;
+	return fw;
+}
 
 int currentPos(){
 	/* return current position as determined by the motor encoder */

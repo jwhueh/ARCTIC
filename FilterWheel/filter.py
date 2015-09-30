@@ -8,6 +8,7 @@ class FilterWheel(object):
 		self.filter = CDLL("./filter_motor.so")
 		self.id = 0
 		self.fw = None
+		self.desPos = None
 
 	def setup(self):
 		"""
@@ -22,6 +23,8 @@ class FilterWheel(object):
 		"""
 		id_binary = self.filter.home()
 		self.id = int(str(id_binary),2)
+		if(self.id != 0):
+			self.fw = 0
 		print "Filter ID: %s, %s" % (id_binary, self.id)
 		return self.id
 
@@ -44,21 +47,23 @@ class FilterWheel(object):
 		"""
 		status = self.filter.moveToFilter(int(pos))
 		print "Filter Wheel Move Status: %s" % str(status)
-		self.fw = status
+		self.desPos = status
+		
 		return status
 
 	def status(self):
 		"""
 		return current status of filter wheel
 		"""
-		dict = {'id':self.id,'encoder':None, 'power':None,'motor':None, 'hall':None, 'position':None}
-		dict['encoder']  = self.filter.currentPos()
+		dict = {'id':self.id,'currentEncoder':None, 'desiredEncoder':None, 'power':None,'motor':None, 'hall':None, 'position':None}
+		dict['currentEncoder']  = self.filter.currentPos()
 		dict['power'] = self.filter.driverStatus()
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
-		dict['position'] = self.fw
-		print dict
+		dict['position'] = self.filter.filterPos()
+		dict['desiredEncoder'] = self.desPos
+		#print dict
 		return dict
 
 
