@@ -21,7 +21,7 @@ int i;
 static int pin;
 static int pinval;
 
-int main(int argc, char *argv[])
+/*int main(int argc, char *argv[])
 {
 
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 	
 		}
        	     }
-}
+}*/
 
 void print_csv(int dio, int value){
         printf("%d,%d\n", dio, value);
