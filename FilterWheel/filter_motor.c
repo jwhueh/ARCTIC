@@ -103,10 +103,22 @@ int moveMotor(char *mv){
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
-                        return 1;
+                        return -1;
                  }      
 	motorOff();
 	return 1;
+}
+
+int motorStatus(){
+	strcpy(out, "EO");
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+        //printf("Motor Driver Status: %s\n",in);
+	return atoi(in);
+
 }
 
 int moveToFilter(int pos){
@@ -116,7 +128,6 @@ int moveToFilter(int pos){
                 printf("Could not send\n");
                 return 1;
         }
-        printf("Current Encoder Value: %s\n",in);
 
 	int incmv = 34140;
 
@@ -145,10 +156,10 @@ int currentPos(){
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
-                return 1;
+                return -1;
         }
-        printf("%s\n",in);
-	return 1;
+        //printf("%s\n",in);
+	return atoi(in);
 }
 
 int zero(){
@@ -333,7 +344,7 @@ int homeVelocity(){
 
 int readConfig(){
 
-	char arra[10][100];
+	//char arra[10][100];
 	char c[1000];
 	char file_name[] = "fw.conf";
    	FILE *fp;
@@ -462,6 +473,24 @@ int findHysteresis(){
 	return 1;
 } 
 
+int hallStatus(){
+	int x;
+	char v[1];
+	char hall[] = "";
+        for(x=36; x<40; x++) {
+        	int value = evgetin((int)x);
+                //printf("%d\t",value);
+		if (value == 0){
+			strcpy(v,"0");
+		} else {
+			strcpy(v, "1");
+		}
+		strcat(hall, v);
+                }
+	return atoi(hall);
+	//return 1;	
+}
+
 
 int setup(){
 	/* setup communications to the device */
@@ -532,7 +561,7 @@ int setup(){
                 return 1;
         }
 
-        printf("Clear Errors: %s\n",in);
+        //printf("Clear Errors: %s\n",in);
 	setVelocity();
 	//info();
 }
