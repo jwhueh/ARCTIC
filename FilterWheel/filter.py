@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import time
 from ctypes import *
 
 class FilterWheel(object):
@@ -54,8 +55,8 @@ class FilterWheel(object):
 		return current status of filter wheel
 		"""
 		dict = {'id':self.id,'currentEncoder':None, 'desiredEncoder':None, 'power':None,'motor':None, 'hall':None, 'position':None}
-		dict['currentEncoder']  = self.filter.currentPos()
 		dict['power'] = self.filter.driverStatus()
+		dict['currentEncoder']  = self.filter.currentPos()
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
@@ -71,6 +72,7 @@ if __name__ == "__main__":
 	#f.home()
 	print f.moveToPosition(1)
 	print f.status()
-	print f.moveToPosition(8)
+	#print f.moveToPosition(8)
+	time.sleep(2)
 	print f.status()
-	f.stop()
+	#f.stop()

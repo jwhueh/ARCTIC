@@ -233,15 +233,6 @@ int motorOn(){
                 return 1;
         }
 
-        sleep(.1);
-        /*strcpy(out, "EO"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-        printf("Motor State is %s\n",in);*/
-
         return 1;
 }
 
