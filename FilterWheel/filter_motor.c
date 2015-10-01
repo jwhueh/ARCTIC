@@ -142,31 +142,31 @@ int motorStatus(){
 }
 
 int moveToFilter(int pos){
-	strcpy(out, "PX");
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
+	/*
+	moves to filter posional number [0-5]
+	returns the desired encoder position
+	*/
 
-	int incmv = 34140;
+	int incmv = 34140; //this should be read in from config file
 
-	int cF = atoi(in) / incmv;
+	int posArr[6]={};
 
-	int toMove = pos - cF;
-	printf("current position: %d, desired position: %d, filter positions to move: %d\n", cF, pos, toMove);
+	//populate array with filter encoder positions
+	int x;
+	for (x=0; x<6; x++) { 
+		posArr[x] = incmv * x;
+	}
+
+	if (pos > sizeof(posArr)/sizeof(int)){
+		return -1;
+	}
+
+	char mv[12];
 	
+	sprintf(mv, "%d", posArr[pos]);
+	moveMotor(mv);
 
-	int pxmv = incmv*toMove +atoi(in);
-
-	printf("encoder steps to move: %d\n", pxmv);
-
-	char c[20];
-
-	sprintf(c, "%d", pxmv);
-	moveMotor(c);
-
-	return pxmv;
+	return posArr[pos];
 }
 
 int filterPos(){

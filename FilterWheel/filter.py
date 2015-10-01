@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-import time
 from ctypes import *
 
 class FilterWheel(object):
@@ -46,7 +45,6 @@ class FilterWheel(object):
 			-1 - unknown
 		"""
 		status = self.filter.moveToFilter(int(pos))
-		print "Filter Wheel Move Status: %s" % str(status)
 		self.desPos = status
 		
 		return status
@@ -71,5 +69,8 @@ if __name__ == "__main__":
 	f = FilterWheel()
 	f.setup()
 	#f.home()
-	f.moveToPosition(1)
-	f.status()
+	print f.moveToPosition(1)
+	print f.status()
+	print f.moveToPosition(8)
+	print f.status()
+	f.stop()
