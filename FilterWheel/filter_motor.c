@@ -432,8 +432,8 @@ int home(){
 			sleep(1);
 			//readConfig();	
 			
-			moveMotor("-900");
-			sleep(1);
+			moveMotor("700");
+			sleep(2);
 			zero();	
 			printf("Zeropoint found, Detecting FW ID.\n");
 

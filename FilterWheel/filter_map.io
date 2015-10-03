@@ -25,3 +25,7 @@ Detent Switches:
 
 Solenoid:
 	DIO_15		83
+
+Filter 0->5 are CCW 
+
+positive move is CCW when looking at the inst

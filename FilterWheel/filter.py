@@ -19,6 +19,13 @@ class FilterWheel(object):
 		self.filter.setup()
 		return
 
+	def closeConnection(self):
+                """
+                close filter wheel communication
+                """
+                self.filter.close()
+                return
+
 	def home(self):
 		"""
 		home filter wheel and set the filter wheel id
@@ -77,7 +84,7 @@ if __name__ == "__main__":
 	f = FilterWheel()
 	f.setup()
 	print f.status()
-	#f.home()
+	f.home()
 	"""f..moveToPosition(5)
 	for c in range(500):
 		state = f.status()
@@ -90,4 +97,4 @@ if __name__ == "__main__":
                 if state['hall'] != '1111':
                         print state
 	"""
-        #print f.status()
+        print f.status()
