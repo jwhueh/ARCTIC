@@ -12,14 +12,14 @@ class FilterWheel(object):
 		self.fw = None
 		self.desPos = None
 
-	def setup(self):
+	def connect(self):
 		"""
 		initiate filter wheel communication
 		"""
 		self.filter.setup()
 		return
 
-	def closeConnection(self):
+	def disconnect(self):
                 """
                 close filter wheel communication
                 """
