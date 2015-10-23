@@ -167,7 +167,7 @@ int moveToFilter(int pos){
 	returns the desired encoder position
 	*/
 
-	int incmv = 33800; //this should be read in from config file
+	int incmv = 33200; //this should be read in from config file
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
@@ -397,13 +397,23 @@ int home(){
                 printf("Could not send\n");
                 return 1;
         }
+
+	strcpy(out, "HSPD=10000"); //set high speed (original value 10000)
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return 1;
+        }
+
         
         strcpy(out, "X410000"); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
                         printf("Could not send\n");
                         return 1;
-                 }      
+                 }    
+
+	sleep(1);
                  
         evclrwatch();
 
@@ -417,9 +427,9 @@ int home(){
                         	printf("Could not send\n");
                         	return 1;
                  	}
+
+
 			sleep(2);
-			currentPos();
-			sleep(1);
 			zero();
 			printf("Near home position detected\n");
 			sleep(1);
@@ -432,7 +442,7 @@ int home(){
 			sleep(1);
 			//readConfig();	
 			
-			moveMotor("700");
+			moveMotor("500");
 			sleep(2);
 			zero();	
 			printf("Zeropoint found, Detecting FW ID.\n");
@@ -441,7 +451,7 @@ int home(){
 			sleep(3);
 			//read ID
 			int x;
-                        char idi[4];
+                        char idi[4] = { 0 };
                         char  v[1];
                         for(x=37; x<40; x++) {
                         int value = evgetin((int)x);
@@ -455,15 +465,12 @@ int home(){
                         }
                                 printf("\n");
 
-
 			sleep(.1);
 			printf("Moving to 0.\n");
-			moveMotor("0");
-			sleep(3);
-
 			setVelocity();
-			printf("Current Position: ");
-			printf("%d\n", currentPos());
+			moveMotor("0");
+			sleep(1);
+
 			printf("ID:%s\n",idi);
 			return atoi(idi);      
                  }

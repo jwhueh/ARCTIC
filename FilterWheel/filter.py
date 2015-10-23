@@ -82,19 +82,8 @@ class FilterWheel(object):
 
 if __name__ == "__main__":
 	f = FilterWheel()
-	f.setup()
+	f.connect()
 	print f.status()
 	f.home()
-	"""f..moveToPosition(5)
-	for c in range(500):
-		state = f.status()
-		if state['hall'] != '1111':
-			print state
-	print f.status()
-	f.moveToPosition(0)
-        for c in range(500):
-                state = f.status()
-                if state['hall'] != '1111':
-                        print state
-	"""
+	f.moveToPosition(5)
         print f.status()
