@@ -20,6 +20,7 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
+static int incmv = 33200;
 int setup();
 int currentPos();
 int motorOn();
@@ -167,7 +168,7 @@ int moveToFilter(int pos){
 	returns the desired encoder position
 	*/
 
-	int incmv = 33200; //this should be read in from config file
+	//int incmv = 33200; //this should be read in from config file
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
@@ -189,7 +190,7 @@ int moveToFilter(int pos){
 
 int filterPos(){
 	int pos = currentPos();
-	int incmv = 33200;
+	//int incmv = 33200;
 	int fw = pos/incmv;
 	return fw;
 }
