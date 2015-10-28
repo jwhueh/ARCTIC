@@ -1,6 +1,12 @@
 /**
+Author: Joseph Huehnerhoff
+Date Created: 2015-09-15
+Purpose: Control Arcus stepper driver for ARCTIC filter wheel
 
-gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c evgpio.c -lusb-1.0 -mcpu=arm9
+usage: gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c evgpio.c -lusb-1.0 -mcpu=arm9
+
+changelog:
+2015-10-28	added comments
 
 **/
 #include <ctype.h>
@@ -10,13 +16,12 @@ gcc -o filter_motor filter_motor.c ArcusPerformaxDriver.c evgpio.c -lusb-1.0 -mc
 #include <unistd.h>
 #include "ArcusPerformaxDriver.h"
 
-
-
 char            lpDeviceString[PERFORMAX_MAX_DEVICE_STRLEN];
 AR_HANDLE       Handle; //usb handle
 char            out[64];
 char            in[64];
 AR_DWORD        num;
+
 int i;
 static int pin;
 static int pinval;
@@ -32,13 +37,9 @@ int moveMotor(char* mv);
 int moveToFilter(int pos);
 int findHysteresis();
 
-
-
-
+/*main function to run the filter wheel from the command line */
 int main(int argc, char *argv[])
 {
-
-
     memset(out,0,64);
     memset(in,0,64);
 
@@ -94,6 +95,7 @@ int main(int argc, char *argv[])
 	return 1;
 }
 
+/* read in and print the digital input pins */
 void print_csv(int dio, int value){
         printf("%d,%d\n", dio, value);
         fflush(stdout);
@@ -101,11 +103,9 @@ void print_csv(int dio, int value){
         pin = dio;
 }
 
-int moveMotor(char *mv){
-	/*
-	Move the motor to absolute encoder position.
-	*/
 
+/* Move the motor to absolute encoder position. */
+int moveMotor(char *mv){
 	motorOn();
 
 	strcpy(out, "CLR"); //read current
@@ -125,10 +125,10 @@ int moveMotor(char *mv){
                         printf("Could not send\n");
                         return -1;
                  }      
-//	motorOff();
 	return 1;
 }
 
+/* Stop motor at current location but decelerate in a safe manner */
 int stopMotor(){
         strcpy(out, "STOP");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -139,6 +139,11 @@ int stopMotor(){
         return 1;
 }
 
+/* Return the state of the motor driver.  
+	Return:
+		1 - driver power on
+		0 - driver power off
+*/
 int driverStatus(){
 	strcpy(out, "EO");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -148,9 +153,25 @@ int driverStatus(){
         }
 	//printf("motor power: %s\n", in);
 	return atoi(in);
-
 }
 
+/* Return motor status
+	Return - bit value determined from:
+	http://staff.washington.edu/jwhueh/ARCTIC/filter/ACE-SDE_Manual_Rev_1.22.pdf
+	page 28, table 6.5, also copied below
+bit	description
+0 	Motor running at constant speed
+1 	Motor in acceleration
+2 	Motor in deceleration
+3	 Home input switch status
+4 	Minus limit input switch status
+5 	Plus limit input switch status
+6 	Minus limit error. This bit is latched when minus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+7	 Plus limit error. This bit is latched when plus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+8 	Latch input status
+9 	Z-index status
+10 	TOC time-out status 
+*/
 int motorStatus(){
         strcpy(out, "MST");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -159,16 +180,13 @@ int motorStatus(){
                 return 1;
         }
         return atoi(in);
-
 }
 
+/*
+moves to filter posional number [0-5]
+returns the desired encoder position
+*/
 int moveToFilter(int pos){
-	/*
-	moves to filter posional number [0-5]
-	returns the desired encoder position
-	*/
-
-	//int incmv = 33200; //this should be read in from config file
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
@@ -188,16 +206,19 @@ int moveToFilter(int pos){
 	return posArr[pos];
 }
 
+/* Provide a filter position number that is associated with a stepper position.
+This really should use the encoder position
+*/
 int filterPos(){
 	int pos = currentPos();
-	//int incmv = 33200;
 	int fw = pos/incmv;
 	return fw;
 }
 
 int currentEnc(){
 	/* return current position as determined by the motor encoder */
-	strcpy(out, "EX");//change back to EX when working properly
+
+	strcpy(out, "EX");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -246,39 +267,26 @@ int zero(){
 
 int motorOff(){
 	/* Turn OFF motor current */
+
 	strcpy(out, "EO=0"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }      
-	sleep(.1);
-	strcpy(out, "EO"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-	//printf("Motor State is %s\n",in);
+	
 	return 1;
 }
 
 int motorOn(){
         /* Turn ON motor current */
+
         strcpy(out, "EO=1"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
-
-	        strcpy(out, "EO"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-        //printf("Motor State is %s\n",in);
 
         return 1;
 }
@@ -291,7 +299,6 @@ int setVelocity(){
 	*Weird things can heppen if they are really high (motor stalls kinda).
 	*/
 	
-       // strcpy(out, "LSPD=5000"); //set low speed (original value 1000)
 	strcpy(out, "LSPD=20000");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -300,7 +307,6 @@ int setVelocity(){
         }
 
         strcpy(out, "HSPD=30000"); //set high speed (original value 10000)
-	//strcpy(out, "HSPD=100000");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -343,6 +349,7 @@ int homeVelocity(){
         *Low Speed and high speed define the path generation velocity.
         *Weird things can heppen if they are really high (motor stalls kinda).
         */
+	
         strcpy(out, "LSPD=300"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
