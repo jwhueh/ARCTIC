@@ -37,6 +37,45 @@ class FilterWheel(object):
 		print "Filter ID: %s, %s" % (id_binary, self.id)
 		return self.id
 
+	def logit(self, text):
+		fout = open(time.strftime("%Y%m%d.home"), 'a')
+		t = time.strftime("%Y%m%dT%H%M%S")
+		fout.write(t+'\t'+str(text)+'\n')
+
+		fout.close()
+
+	def runHomePythonic(self):
+		"""
+		let's make this non-blcoking by threading it
+		"""
+		thread.start_new_thread(homePythonic,())
+
+	def homePythonic(self):
+		"""
+		create a non-blocking homing routine using the low level ctypes
+		for testing purposes lets log and time everything to make sure it will work
+		"""
+		quit = 0
+		x = 0
+		self.logit('starting home')
+		self.logit('starting motor move to 410000')
+		self.moveMotor("410000")
+		self.logit('watch those hall effects, this might be tricky')
+		while(!quit):
+			state = self.status()
+			self.logit(str(state))
+			if dict['hall'] != '0000' or dict['hall'] != '1000':
+				self.stopMotor()
+				quit = 1
+				self.logit('hey, found it')
+			if x>10000:
+				return -1
+			x+=
+		self.zero()
+		self.filter.homeVelocity()
+		return
+				
+
 	def stop(self):
 		"""
 		stop filter wheel motion

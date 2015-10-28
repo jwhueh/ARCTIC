@@ -95,8 +95,9 @@ int main(int argc, char *argv[])
 	return 1;
 }
 
-/* read in and print the digital input pins */
 void print_csv(int dio, int value){
+	/* read in and print the digital input pins */
+
         printf("%d,%d\n", dio, value);
         fflush(stdout);
         pinval = evgetin(dio);
@@ -104,8 +105,9 @@ void print_csv(int dio, int value){
 }
 
 
-/* Move the motor to absolute encoder position. */
 int moveMotor(char *mv){
+	/* Move the motor to absolute encoder position. */
+
 	motorOn();
 
 	strcpy(out, "CLR"); //read current
@@ -128,8 +130,8 @@ int moveMotor(char *mv){
 	return 1;
 }
 
-/* Stop motor at current location but decelerate in a safe manner */
 int stopMotor(){
+	/* Stop motor at current location but decelerate in a safe manner */
         strcpy(out, "STOP");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -139,12 +141,13 @@ int stopMotor(){
         return 1;
 }
 
-/* Return the state of the motor driver.  
-	Return:
-		1 - driver power on
-		0 - driver power off
-*/
 int driverStatus(){
+	/* Return the state of the motor driver.
+        * Return:
+        *        1 - driver power on
+        *        0 - driver power off
+	*/
+
 	strcpy(out, "EO");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -155,24 +158,25 @@ int driverStatus(){
 	return atoi(in);
 }
 
-/* Return motor status
-	Return - bit value determined from:
-	http://staff.washington.edu/jwhueh/ARCTIC/filter/ACE-SDE_Manual_Rev_1.22.pdf
-	page 28, table 6.5, also copied below
-bit	description
-0 	Motor running at constant speed
-1 	Motor in acceleration
-2 	Motor in deceleration
-3	 Home input switch status
-4 	Minus limit input switch status
-5 	Plus limit input switch status
-6 	Minus limit error. This bit is latched when minus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
-7	 Plus limit error. This bit is latched when plus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
-8 	Latch input status
-9 	Z-index status
-10 	TOC time-out status 
-*/
 int motorStatus(){
+	/* Return motor status
+        * Return - bit value determined from:
+        * http://staff.washington.edu/jwhueh/ARCTIC/filter/ACE-SDE_Manual_Rev_1.22.pdf
+        * page 28, table 6.5, also copied below
+	* bit     description
+	* 0       Motor running at constant speed
+	* 1       Motor in acceleration
+	* 2       Motor in deceleration
+	* 3        Home input switch status
+	* 4       Minus limit input switch status
+	* 5       Plus limit input switch status
+	* 6       Minus limit error. This bit is latched when minus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+	* 7        Plus limit error. This bit is latched when plus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+	* 8       Latch input status
+	* 9       Z-index status
+	* 10      TOC time-out status
+	*/
+
         strcpy(out, "MST");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -182,11 +186,12 @@ int motorStatus(){
         return atoi(in);
 }
 
-/*
-moves to filter posional number [0-5]
-returns the desired encoder position
-*/
 int moveToFilter(int pos){
+	/*
+	* moves to filter posional number [0-5]
+	* returns the desired encoder position
+	*/
+
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
@@ -206,10 +211,11 @@ int moveToFilter(int pos){
 	return posArr[pos];
 }
 
-/* Provide a filter position number that is associated with a stepper position.
-This really should use the encoder position
-*/
 int filterPos(){
+	/* Provide a filter position number that is associated with a stepper position.
+	* This really should use the encoder position
+	*/
+
 	int pos = currentPos();
 	int fw = pos/incmv;
 	return fw;
@@ -320,15 +326,17 @@ int setVelocity(){
                 return 1;
         }
 
-       sleep(.1);
-        
+        sleep(.1);
+       
+	// just verify it actually changed
+ 
         strcpy(out, "LSPD"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {       
                 printf("Could not send\n");
                 return 1;
         }
-        sleep(.11);
+        sleep(.1);
         printf("LSPD: %s\n",in);
         
         strcpy(out, "HSPD"); //read current
@@ -337,7 +345,7 @@ int setVelocity(){
                 printf("Could not send\n");
                 return 1;
         }
-        sleep(.11);
+        sleep(.1);
         printf("HSPD: %s\n",in);
         
 
@@ -345,9 +353,9 @@ int setVelocity(){
 }
 
 int homeVelocity(){
-	 /* set the speed and ramp parameters
-        *Low Speed and high speed define the path generation velocity.
-        *Weird things can heppen if they are really high (motor stalls kinda).
+	 /* set the speed and ramp parameters for slower home velocity
+        * Low Speed and high speed define the path generation velocity.
+        * Weird things can heppen if they are really high (motor stalls kinda).
         */
 	
         strcpy(out, "LSPD=300"); //set low speed (original value 1000)
@@ -374,6 +382,9 @@ int homeVelocity(){
 }
 
 int readConfig(){
+	/* Read in parameters that are currently hard coded
+	* This is currently not used
+	*/
 
 	//char arra[10][100];
 	char c[1000];
@@ -398,6 +409,12 @@ int readConfig(){
 
 
 int home(){
+	/* initiate a homing routine of the filter wheel
+	* first spin it around till the id bits are seen.
+	* then back into the hall effect edge
+	* offset a known amount to center and zero the encoders
+	*/
+
 	printf("Starting Home Routine.\nMoving till home sensors detected.\n");
 	strcpy(out, "EO=1"); //enable device
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
@@ -524,6 +541,8 @@ int findHysteresis(){
 } 
 
 int hallStatus(){
+	/* read the hall values of the hall effect sensors */
+
 	int x;
 	char v[1];
 	char hall[] = "";
@@ -542,6 +561,8 @@ int hallStatus(){
 }
 
 int closeConnection(){
+	/* cleanly close the usb connection */
+
         memset(out,0,64);
         memset(in,0,64);
          if(!fnPerformaxComClose(Handle))
@@ -554,7 +575,8 @@ int closeConnection(){
 
 
 int setup(){
-	/* setup communications to the device */
+	/* setup communications with the driver and set initial parameters */
+
 	memset(out,0,64);
         memset(in,0,64);
 
