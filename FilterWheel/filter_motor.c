@@ -189,7 +189,7 @@ int moveToFilter(int pos){
 
 int filterPos(){
 	int pos = currentPos();
-	int incmv = 33800;
+	int incmv = 33200;
 	int fw = pos/incmv;
 	return fw;
 }
