@@ -3,14 +3,20 @@
 import os
 import time
 from ctypes import *
+import random
+import numpy as np
 
 class FilterWheel(object):
 	def __init__(self):
-		#self.filter = CDLL("./filter_motor.so")
                 self.filter = CDLL(os.path.join(os.getenv("FILTERDIR"), "filter_motor.so"))
 		self.id = 0
 		self.fw = None
 		self.desPos = None
+		self.debug = False
+		self.abortStatus = False
+		self.filterDelta = 1325
+		self.homingState = False
+
 
 	def connect(self):
 		"""
@@ -26,55 +32,77 @@ class FilterWheel(object):
                 self.filter.close()
                 return
 
+	def abort(self, toggle = None):
+		"""
+		set the abort flag
+		"""
+		self.abortStatus = toggle
+		return toggle
+
+	def debugMode(self, toggle = None):
+		"""
+		set the debug flag
+		"""
+		self.debug = toggle
+		return toggle
+
 	def home(self):
 		"""
 		home filter wheel and set the filter wheel id
 		"""
-		id_binary = self.filter.home()
-		self.id = int(str(id_binary),2)
-		if(self.id != 0):
-			self.fw = 0
-		print "Filter ID: %s, %s" % (id_binary, self.id)
-		return self.id
 
-	def logit(self, text):
-		fout = open(time.strftime("%Y%m%d.home"), 'a')
-		t = time.strftime("%Y%m%dT%H%M%S")
-		fout.write(t+'\t'+str(text)+'\n')
+		crossArr = []
+		self.homingState = True
+		while self.abortStatus == False:
+			print time.strftime("%Y%m%dT%H%M%S  homing: starting home routine")
+			self.zero()
+			self.moveArb("20000")
+			time.sleep(1) #so that it always completes one revolution even if at home
+			for x in range(2000):
+				stat = self.status()
+				hall = stat['hall']
+				if hall != '0111' and hall != '1111' and len(crossArr) > 4:
+					print time.strftime("%Y%m%dT%H%M%S  homing: at home position")
+					self.stop()
+					time.sleep(.5)
+					self.zero()
 
-		fout.close()
+					print time.strftime("%Y%m%dT%H%M%S  homing: motor stopped, deteriming ID")
+					id_inverse = ""
+					for r in range(3):
+						h = hall[r+1]
+						id_inverse = id_inverse + str(1 - int(h))
+					self.id = int(str(id_inverse),2)
+                			if(self.id != 0):
+                        			self.fw = 0
+                				print time.strftime("%Y%m%dT%H%M%S  homing: Filter ID") + (" %s, %s" % (id_inverse, self.id))
 
-	def runHomePythonic(self):
-		"""
-		let's make this non-blcoking by threading it
-		"""
-		thread.start_new_thread(homePythonic,())
-
-	def homePythonic(self):
-		"""
-		create a non-blocking homing routine using the low level ctypes
-		for testing purposes lets log and time everything to make sure it will work
-		"""
-		quit = 0
-		x = 0
-		self.logit('starting home')
-		self.logit('starting motor move to 410000')
-		self.moveMotor("410000")
-		self.logit('watch those hall effects, this might be tricky')
-		while(!quit):
-			state = self.status()
-			self.logit(str(state))
-			if dict['hall'] != '0000' or dict['hall'] != '1000':
-				self.stopMotor()
-				quit = 1
-				self.logit('hey, found it')
-			if x>10000:
-				return -1
-			x+=
-		self.zero()
-		self.filter.homeVelocity()
-		return
-				
+					diffArr=[]
+					for i,c in enumerate(crossArr):
+						try:
+							diff = crossArr[i+1] - c
+							if diff < 1500 and diff > 1300:
+								diffArr.append(diff)
+						except IndexError:
+							break
+					self.filterDelta = np.mean(diffArr)
+					print time.strftime("%Y%m%dT%H%M%S  homing: filterDelta:"), self.filterDelta
+					print self.status()
+					self.homingState = False
+					print time.strftime("%Y%m%dT%H%M%S  homing: complete")
+                			return True 
+				if hall == '0111':
+					try:
+						st = stat['currentEncoder']
+						print time.strftime("%Y%m%dT%H%M%S  homing:  recording filter position"), st
+						posArr = len(crossArr) - 1
+						if len(crossArr) == 0 or st > crossArr[posArr] + 1000:
+                                                        crossArr.append(stat['currentEncoder'])
+						elif len(crossArr) > 0 and  st < crossArr[posArr] + 1000 :
+							crossArr[posArr] = np.mean([st, crossArr[posArr]])
+					except IndexError:
+						print 'not in crossArr'
+			return False
 
 	def stop(self):
 		"""
@@ -87,6 +115,18 @@ class FilterWheel(object):
 		self.filter.zero()
 		return
 
+	def moveArb(self, pos = None):
+		"""
+		move to an arbitrary position in step space
+		arguments:
+			int pos - steps to move
+		return: 
+			0 - fail
+			1 - completed
+			-1 - fail
+		"""
+		self.filter.moveMotor(str(pos))
+
 	def moveToPosition(self, pos):
 		"""
 		move to a specific filter wheel position
@@ -97,32 +137,53 @@ class FilterWheel(object):
 			1 - succeed
 			-1 - unknown
 		"""
-		status = self.filter.moveToFilter(int(pos))
-		self.desPos = status
+		stepPos = self.filter.moveToFilter(int(pos), int(self.filterDelta))
+		self.desPos = stepPos
+		st = self.status()
+		if self.debug:	
+			while  st['currentStep'] != st['desiredStep']:
+				st = self.status()
+				self.log(st)
+				if st['desiredStep'] == None:
+					return stepPos
 		
-		return status
+		return stepPos
 
 	def status(self):
 		"""
 		return current status of filter wheel
 		"""
-		dict = {'id':self.id,'currentStep':None, 'currentStep':None, 'desiredStep':None, 'power':None,'motor':None, 'hall':None, 'position':None}
+		dict = {'id':self.id,'currentStep':None, 'currentStep':None, 'desiredStep':None, 'power':None,'motor':None, 'hall':None, 'position':None, 'filterDelta':None}
 		dict['power'] = self.filter.driverStatus()
 		dict['currentEncoder']  = self.filter.currentEnc()
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
-		dict['position'] = self.filter.filterPos()
+		dict['position'] = int(dict['currentEncoder'] / self.filterDelta)
 		dict['desiredStep'] = self.desPos
 		dict['currentStep'] = self.filter.currentPos()
-		#print dict
+		dict['filterDelta'] = self.filterDelta
 		return dict
+
+	def log(self, txt = None):
+		"""
+		save commands to file
+		"""
+		t = time.strftime("%Y%m%dT%H%M%S")
+		fin = open(time.strftime("%Y%m%d.log"),'a')
+		fin.write(t + ', ' + str(txt)+'\n')
+		fin.close()
 
 
 if __name__ == "__main__":
 	f = FilterWheel()
 	f.connect()
+	#f.zero()
 	print f.status()
+	#f.moveToPosition(3)
 	f.home()
-	f.moveToPosition(5)
-        print f.status()
+	#f.moveToPosition(2)
+	#for x in range(50):
+	#	f.moveToPosition(random.randrange(0,5,1))
+	#	time.sleep(5)
+	#f.moveToPosition(0)

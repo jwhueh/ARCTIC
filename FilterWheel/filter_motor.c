@@ -25,17 +25,13 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
-static int incmv = 33200;
 int setup();
 int currentPos();
 int motorOn();
 int motorOff();
-int readConfig();
 int zero();
-int home();
 int moveMotor(char* mv);
-int moveToFilter(int pos);
-int findHysteresis();
+int moveToFilter(int pos, int delta);
 
 /*main function to run the filter wheel from the command line */
 int main(int argc, char *argv[])
@@ -60,16 +56,9 @@ int main(int argc, char *argv[])
 		case 'o':
 		    motorOff();
 		    break;
-		case 'c':
-		    readConfig();
-		    break;
 		case 'z':
 		    zero();
 		    break;
-		case 'h':;
-                    int retStr = home();
-		    printf("Filter ID: %d\n", retStr);
-                    break;
 		case '?':
          	    if (isprint (optopt))
            	        fprintf (stderr, "Unknown option `-%c'.\n", optopt);
@@ -88,16 +77,15 @@ int main(int argc, char *argv[])
                     break;
 		case 'f':
                     printf("%s\n", argv[2]);
-                    moveToFilter(atoi(argv[2]));
+                    moveToFilter(atoi(argv[2]), atoi(argv[3]));
                     break;
 		}
        	     }
 	return 1;
 }
 
+/* read in and print the digital input pins */
 void print_csv(int dio, int value){
-	/* read in and print the digital input pins */
-
         printf("%d,%d\n", dio, value);
         fflush(stdout);
         pinval = evgetin(dio);
@@ -105,22 +93,22 @@ void print_csv(int dio, int value){
 }
 
 
+/* Move the motor to absolute encoder position. */
 int moveMotor(char *mv){
-	/* Move the motor to absolute encoder position. */
-
 	motorOn();
+
 
 	strcpy(out, "CLR"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
-                return 1;
+                return -1;
         }
 	
 	
 	char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
-        strcat(cmd, mv);
+	strcat(cmd, mv);
         strcpy(out, cmd); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
@@ -130,8 +118,10 @@ int moveMotor(char *mv){
 	return 1;
 }
 
+
+
+/* Stop motor at current location but decelerate in a safe manner */
 int stopMotor(){
-	/* Stop motor at current location but decelerate in a safe manner */
         strcpy(out, "STOP");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -141,13 +131,12 @@ int stopMotor(){
         return 1;
 }
 
+/* Return the state of the motor driver.  
+	Return:
+		1 - driver power on
+		0 - driver power off
+*/
 int driverStatus(){
-	/* Return the state of the motor driver.
-        * Return:
-        *        1 - driver power on
-        *        0 - driver power off
-	*/
-
 	strcpy(out, "EO");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -158,25 +147,24 @@ int driverStatus(){
 	return atoi(in);
 }
 
+/* Return motor status
+	Return - bit value determined from:
+	http://staff.washington.edu/jwhueh/ARCTIC/filter/ACE-SDE_Manual_Rev_1.22.pdf
+	page 28, table 6.5, also copied below
+bit	description
+0 	Motor running at constant speed
+1 	Motor in acceleration
+2 	Motor in deceleration
+3	 Home input switch status
+4 	Minus limit input switch status
+5 	Plus limit input switch status
+6 	Minus limit error. This bit is latched when minus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+7	 Plus limit error. This bit is latched when plus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
+8 	Latch input status
+9 	Z-index status
+10 	TOC time-out status 
+*/
 int motorStatus(){
-	/* Return motor status
-        * Return - bit value determined from:
-        * http://staff.washington.edu/jwhueh/ARCTIC/filter/ACE-SDE_Manual_Rev_1.22.pdf
-        * page 28, table 6.5, also copied below
-	* bit     description
-	* 0       Motor running at constant speed
-	* 1       Motor in acceleration
-	* 2       Motor in deceleration
-	* 3        Home input switch status
-	* 4       Minus limit input switch status
-	* 5       Plus limit input switch status
-	* 6       Minus limit error. This bit is latched when minus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
-	* 7        Plus limit error. This bit is latched when plus limit is hit during motion. This error must be cleared using the CLR command before issuing any subsequent move commands.
-	* 8       Latch input status
-	* 9       Z-index status
-	* 10      TOC time-out status
-	*/
-
         strcpy(out, "MST");
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -186,18 +174,17 @@ int motorStatus(){
         return atoi(in);
 }
 
-int moveToFilter(int pos){
-	/*
-	* moves to filter posional number [0-5]
-	* returns the desired encoder position
-	*/
-
+/*
+moves to filter posional number [0-5]
+returns the desired encoder position
+*/
+int moveToFilter(int pos, int delta){
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
 	int x;
 	for (x=0; x<6; x++) { 
-		posArr[x] = incmv * x;
+		posArr[x] = delta * x;
 	}
 
 	if (pos > sizeof(posArr)/sizeof(int)){
@@ -209,16 +196,6 @@ int moveToFilter(int pos){
 	sprintf(mv, "%d", posArr[pos]);
 	moveMotor(mv);
 	return posArr[pos];
-}
-
-int filterPos(){
-	/* Provide a filter position number that is associated with a stepper position.
-	* This really should use the encoder position
-	*/
-
-	int pos = currentPos();
-	int fw = pos/incmv;
-	return fw;
 }
 
 int currentEnc(){
@@ -305,14 +282,14 @@ int setVelocity(){
 	*Weird things can heppen if they are really high (motor stalls kinda).
 	*/
 	
-	strcpy(out, "LSPD=20000");
+	strcpy(out, "LSPD=300"); //was 20000
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=30000"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=500"); //set high speed (original value 10000, 30000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -326,17 +303,15 @@ int setVelocity(){
                 return 1;
         }
 
-        sleep(.1);
-       
-	// just verify it actually changed
- 
+       sleep(.1);
+        
         strcpy(out, "LSPD"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {       
                 printf("Could not send\n");
                 return 1;
         }
-        sleep(.1);
+        sleep(.11);
         printf("LSPD: %s\n",in);
         
         strcpy(out, "HSPD"); //read current
@@ -345,7 +320,7 @@ int setVelocity(){
                 printf("Could not send\n");
                 return 1;
         }
-        sleep(.1);
+        sleep(.11);
         printf("HSPD: %s\n",in);
         
 
@@ -353,19 +328,19 @@ int setVelocity(){
 }
 
 int homeVelocity(){
-	 /* set the speed and ramp parameters for slower home velocity
-        * Low Speed and high speed define the path generation velocity.
-        * Weird things can heppen if they are really high (motor stalls kinda).
+	 /* set the speed and ramp parameters
+        *Low Speed and high speed define the path generation velocity.
+        *Weird things can heppen if they are really high (motor stalls kinda).
         */
 	
-        strcpy(out, "LSPD=300"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=10"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=1000"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=50"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -381,168 +356,7 @@ int homeVelocity(){
         return 1;
 }
 
-int readConfig(){
-	/* Read in parameters that are currently hard coded
-	* This is currently not used
-	*/
-
-	//char arra[10][100];
-	char c[1000];
-	char file_name[] = "fw.conf";
-   	FILE *fp;
-	fp = fopen(file_name,"r"); // read mode
- 
-   	if( fp == NULL )
-   	{
-      		perror("Error while opening the file.\n");
-      		exit(EXIT_FAILURE);
-   	}
- 
-   	printf("The contents of %s file are :\n", file_name);
-
-	fscanf(fp,"%[^\n]",c);
-   	printf("Data from file:\n%s",c);
-   	fclose(fp);
- 
-  	return 0;
-	}
-
-
-int home(){
-	/* initiate a homing routine of the filter wheel
-	* first spin it around till the id bits are seen.
-	* then back into the hall effect edge
-	* offset a known amount to center and zero the encoders
-	*/
-
-	printf("Starting Home Routine.\nMoving till home sensors detected.\n");
-	strcpy(out, "EO=1"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-	strcpy(out, "HSPD=10000"); //set high speed (original value 10000)
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        
-        strcpy(out, "X410000"); //move the motor
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }    
-
-	sleep(1);
-                 
-        evclrwatch();
-
-        //change this to a timed loop
-        while(1){
-                evwatchin(print_csv);
-                if(pin == 37 || pin == 38 || pin == 39){
-			strcpy(out, "STOP");
-        		if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                	{
-                        	printf("Could not send\n");
-                        	return 1;
-                 	}
-
-
-			sleep(2);
-			zero();
-			printf("Near home position detected\n");
-			sleep(1);
-			
-			printf("Starting slow home.\n");
-			homeVelocity();
-			findHysteresis();
-		
-	
-			sleep(1);
-			//readConfig();	
-			
-			moveMotor("500");
-			sleep(2);
-			zero();	
-			printf("Zeropoint found, Detecting FW ID.\n");
-
-			moveMotor("-500");  //move to trigger point
-			sleep(3);
-			//read ID
-			int x;
-                        char idi[4] = { 0 };
-                        char  v[1];
-                        for(x=37; x<40; x++) {
-                        int value = evgetin((int)x);
-                        printf("%d\t",value);
-                        if (value == 0){
-                                        strcpy(v,"1");
-                                } else{
-                                        strcpy(v,"0");
-                                }
-                                strcat(idi, v);
-                        }
-                                printf("\n");
-
-			sleep(.1);
-			printf("Moving to 0.\n");
-			setVelocity();
-			moveMotor("0");
-			sleep(1);
-
-			printf("ID:%s\n",idi);
-			return atoi(idi);      
-                 }
-		}
-        return -1;
-} 
-
-int findHysteresis(){
-	// change this code to use the current position paramter
-	motorOn();
-	homeVelocity();
-	sleep(1);
-	strcpy(out, "X-5000"); //move the motor
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-	
-	evclrwatch();
-	int y;
-	for (y=0;y<3;y++){	
-        	evwatchin(print_csv);
-		int x;
-		 for(x=37; x<40; x++) {
-                        int value = evgetin((int)x);
-                        printf("%d\t",value);
-                }
-                printf("\n");
-
-                if(pin == 39 || pin == 38 || pin == 37){
-			strcpy(out, "STOP");
-                        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                        {
-                                printf("Could not send\n");
-                                return 1;
-                        }
-			return 1;
-                	}
-
-		}
-	return -1;
-} 
-
 int hallStatus(){
-	/* read the hall values of the hall effect sensors */
-
 	int x;
 	char v[1];
 	char hall[] = "";
@@ -561,8 +375,6 @@ int hallStatus(){
 }
 
 int closeConnection(){
-	/* cleanly close the usb connection */
-
         memset(out,0,64);
         memset(in,0,64);
          if(!fnPerformaxComClose(Handle))
@@ -575,8 +387,7 @@ int closeConnection(){
 
 
 int setup(){
-	/* setup communications with the driver and set initial parameters */
-
+	/* setup communications to the device */
 	memset(out,0,64);
         memset(in,0,64);
 
@@ -715,7 +526,7 @@ int setup(){
         printf("Set Directional Polarity: %s\n",in);
 
 
-        strcpy(out, "SCV=1"); //read current
+        strcpy(out, "SCV=0"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -773,6 +584,31 @@ int setup(){
         }
 
 	printf("Write Motor Parameters, RW: %s\n",in);
+
+
+        sleep(1);
+        strcpy(out, "SL=1"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return -1;
+        }       
+        
+        printf("Write SL Parameters, SNL: %s\n",in);
+
+
+	 sleep(1);
+
+        strcpy(out, "SLR=25"); //read current
+        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
+        {
+                printf("Could not send\n");
+                return -1;
+        }       
+
+        printf("Write SNL Parameters, SNL: %s\n",in);
+
+
         sleep(2.5);
 
         strcpy(out, "CLR"); //read current
