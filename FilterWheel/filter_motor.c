@@ -25,18 +25,13 @@ AR_DWORD        num;
 int i;
 static int pin;
 static int pinval;
-static int incmv = 1325; //was 33200 before turning on sl
-static int encmv = 1325;
 int setup();
 int currentPos();
 int motorOn();
 int motorOff();
-int readConfig();
 int zero();
-int home();
 int moveMotor(char* mv);
-int moveToFilter(int pos);
-int findHysteresis();
+int moveToFilter(int pos, int delta);
 
 /*main function to run the filter wheel from the command line */
 int main(int argc, char *argv[])
@@ -61,16 +56,9 @@ int main(int argc, char *argv[])
 		case 'o':
 		    motorOff();
 		    break;
-		case 'c':
-		    readConfig();
-		    break;
 		case 'z':
 		    zero();
 		    break;
-		case 'h':;
-                    int retStr = home();
-		    printf("Filter ID: %d\n", retStr);
-                    break;
 		case '?':
          	    if (isprint (optopt))
            	        fprintf (stderr, "Unknown option `-%c'.\n", optopt);
@@ -89,7 +77,7 @@ int main(int argc, char *argv[])
                     break;
 		case 'f':
                     printf("%s\n", argv[2]);
-                    moveToFilter(atoi(argv[2]));
+                    moveToFilter(atoi(argv[2]), atoi(argv[3]));
                     break;
 		}
        	     }
@@ -109,6 +97,7 @@ void print_csv(int dio, int value){
 int moveMotor(char *mv){
 	motorOn();
 
+
 	strcpy(out, "CLR"); //read current
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
@@ -119,7 +108,7 @@ int moveMotor(char *mv){
 	
 	char cmd[12] = "X";  //Setup the Axes to move, this is a single axis controlled so it will always be x
 
-        strcat(cmd, mv);
+	strcat(cmd, mv);
         strcpy(out, cmd); //move the motor
                 if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
                 {
@@ -189,13 +178,13 @@ int motorStatus(){
 moves to filter posional number [0-5]
 returns the desired encoder position
 */
-int moveToFilter(int pos){
+int moveToFilter(int pos, int delta){
 	int posArr[6]={};
 
 	//populate array with filter encoder positions
 	int x;
 	for (x=0; x<6; x++) { 
-		posArr[x] = incmv * x;
+		posArr[x] = delta * x;
 	}
 
 	if (pos > sizeof(posArr)/sizeof(int)){
@@ -207,15 +196,6 @@ int moveToFilter(int pos){
 	sprintf(mv, "%d", posArr[pos]);
 	moveMotor(mv);
 	return posArr[pos];
-}
-
-/* Provide a filter position number that is associated with a stepper position.
-This really should use the encoder position
-*/
-int filterPos(){
-	int pos = currentEnc();
-	int fw = pos/encmv;
-	return fw;
 }
 
 int currentEnc(){
@@ -309,14 +289,14 @@ int setVelocity(){
                 return 1;
         }
 
-        strcpy(out, "HSPD=1000"); //set high speed (original value 10000, 30000)
+        strcpy(out, "HSPD=500"); //set high speed (original value 10000, 30000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "ACC=100"); //set acceleration (original value 300)
+        strcpy(out, "ACC=10"); //set acceleration (original value 300)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -353,14 +333,14 @@ int homeVelocity(){
         *Weird things can heppen if they are really high (motor stalls kinda).
         */
 	
-        strcpy(out, "LSPD=100"); //set low speed (original value 1000)
+        strcpy(out, "LSPD=10"); //set low speed (original value 1000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
                 return 1;
         }
 
-        strcpy(out, "HSPD=500"); //set high speed (original value 10000)
+        strcpy(out, "HSPD=50"); //set high speed (original value 10000)
         if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
         {
                 printf("Could not send\n");
@@ -375,156 +355,6 @@ int homeVelocity(){
         }
         return 1;
 }
-
-int readConfig(){
-
-	//char arra[10][100];
-	char c[1000];
-	char file_name[] = "fw.conf";
-   	FILE *fp;
-	fp = fopen(file_name,"r"); // read mode
- 
-   	if( fp == NULL )
-   	{
-      		perror("Error while opening the file.\n");
-      		exit(EXIT_FAILURE);
-   	}
- 
-   	printf("The contents of %s file are :\n", file_name);
-
-	fscanf(fp,"%[^\n]",c);
-   	printf("Data from file:\n%s",c);
-   	fclose(fp);
- 
-  	return 0;
-	}
-
-
-int home(){
-	printf("Starting Home Routine.\nMoving till home sensors detected.\n");
-	strcpy(out, "EO=1"); //enable device
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-	strcpy(out, "HSPD=1000"); //set high speed (original value 10000)
-        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-        {
-                printf("Could not send\n");
-                return 1;
-        }
-
-        
-        strcpy(out, "X10000"); //move the motor, was 410000
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }    
-
-	sleep(1);
-                 
-        evclrwatch();
-
-        //change this to a timed loop
-        while(1){
-                evwatchin(print_csv);
-                if(pin == 37 || pin == 38 || pin == 39){
-			strcpy(out, "STOP");
-        		if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                	{
-                        	printf("Could not send\n");
-                        	return 1;
-                 	}
-
-
-			sleep(2);
-			zero();
-			printf("Near home position detected\n");
-			sleep(1);
-			
-			printf("Starting slow home.\n");
-			homeVelocity();
-			findHysteresis();
-		
-	
-			sleep(1);
-			//readConfig();	
-			
-			moveMotor("20"); //was 500
-			sleep(2);
-			zero();	
-			printf("Zeropoint found, Detecting FW ID.\n");
-
-			moveMotor("-20");  //move to trigger point
-			sleep(3);
-			//read ID
-			int x;
-                        char idi[4] = { 0 };
-                        char  v[1];
-                        for(x=37; x<40; x++) {
-                        int value = evgetin((int)x);
-                        printf("%d\t",value);
-                        if (value == 0){
-                                        strcpy(v,"1");
-                                } else{
-                                        strcpy(v,"0");
-                                }
-                                strcat(idi, v);
-                        }
-                                printf("\n");
-
-			sleep(.1);
-			printf("Moving to 0.\n");
-			setVelocity();
-			moveMotor("0");
-			sleep(1);
-
-			printf("ID:%s\n",idi);
-			return atoi(idi);      
-                 }
-		}
-        return -1;
-} 
-
-int findHysteresis(){
-	// change this code to use the current position paramter
-	motorOn();
-	homeVelocity();
-	sleep(1);
-	strcpy(out, "X-5000"); //move the motor
-                if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                {
-                        printf("Could not send\n");
-                        return 1;
-                 }
-	
-	evclrwatch();
-	int y;
-	for (y=0;y<3;y++){	
-        	evwatchin(print_csv);
-		int x;
-		 for(x=37; x<40; x++) {
-                        int value = evgetin((int)x);
-                        printf("%d\t",value);
-                }
-                printf("\n");
-
-                if(pin == 39 || pin == 38 || pin == 37){
-			strcpy(out, "STOP");
-                        if(!fnPerformaxComSendRecv(Handle, out, 64,64, in))
-                        {
-                                printf("Could not send\n");
-                                return 1;
-                        }
-			return 1;
-                	}
-
-		}
-	return -1;
-} 
 
 int hallStatus(){
 	int x;

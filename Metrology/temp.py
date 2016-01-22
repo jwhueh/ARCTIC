@@ -7,11 +7,10 @@ import time
 
 class Metrology(object):
 	def __init__(self):
-		pass
 		self.ser = None
 		self.serial = '/dev/ttyS0'
 		self.sensors=[]
-		self.delay = 0.5
+		self.delay = .5
 		self.start()
 		self.findTempSensors()
 		self.setupSensors()
@@ -39,6 +38,7 @@ class Metrology(object):
 
 	def findTempSensors(self):
 		self.sensors.append(self.serWrite('S\r').rstrip('\r'))
+		time.sleep(5)
 		while True:
 			out = self.serWrite('s\r')
 			if len(out) <=3:
@@ -61,9 +61,10 @@ class Metrology(object):
 		self.deviceSelect(dev)
 		self.serWrite('M')
 		self.serWrite('W0144')
-		time.sleep(10)
+		time.sleep(1)
 		self.serWrite('M')
 		output = self.serWrite('W0ABEFFFFFFFFFFFFFFFFFF')
+		print output
 		t = self.convert(output)	
 		return t
 
@@ -86,10 +87,37 @@ class Metrology(object):
 		lsb = sig[2:4]
 		msb = sig[4:6]
 		lm = msb+lsb
-		temp = int('0x%s' % lm,0)/16.
-		return temp
+		neg = sig[4:5]
+		count_remain = sig[14:16]
+		count_c = sig[16:18]
+		print lsb, msb, neg, count_remain, count_c
+		#make into binary
+		binary = bin(int(lm, 16))[2:].zfill(16)
+		
+		if neg == 'F':
+			print binary
+			outbin = ""
+			for b in binary:
+				if b == '1':
+					outbin = outbin + '0'
+				else:
+					outbin = outbin + '1'
+
+			outhex = (int(outbin, 2))
+			print outhex
+			temp = -int('%s' % outhex,0)/16. 
+			return temp
+
+			
+		else:
+			print lm
+			temp = int('0x%s' % str(lm),0)/16.
+			return temp	
+		return 
 
 if __name__ == "__main__":
 	m = Metrology()
-	#m.readTemp('0FFCDBE0000F2FBA')
+	#m.setResolution('1C00000365971D28')
+	#time.sleep(2)
+	#print m.readTemp('1C00000365971D28')
 	m.run()
