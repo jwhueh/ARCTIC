@@ -70,7 +70,7 @@ class FilterWheel(object):
 					print time.strftime("%Y%m%dT%H%M%S  homing: motor stopped, deteriming ID")
 					id_inverse = ""
 					for r in range(3):
-						h = hall[r+1]
+						h = hall[3-r]
 						id_inverse = id_inverse + str(1 - int(h))
 					self.id = int(str(id_inverse),2)
                 			if(self.id != 0):
@@ -159,7 +159,7 @@ class FilterWheel(object):
 		dict['motor'] = self.filter.motorStatus()
 		hall = self.filter.hallStatus()
 		dict['hall'] = str(hall).zfill(4)
-		dict['position'] = int(dict['currentEncoder'] / self.filterDelta)
+		dict['position'] = int(round(dict['currentEncoder'] / self.filterDelta))
 		dict['desiredStep'] = self.desPos
 		dict['currentStep'] = self.filter.currentPos()
 		dict['filterDelta'] = self.filterDelta

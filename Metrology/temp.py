@@ -12,8 +12,8 @@ class Metrology(object):
 		self.sensors=[]
 		self.delay = .5
 		self.start()
-		#self.findTempSensors()
-		#self.setupSensors()
+		self.findTempSensors()
+		self.setupSensors()
 
 	def run(self):
 		while True:
@@ -95,7 +95,6 @@ class Metrology(object):
 		binary = bin(int(lm, 16))[2:].zfill(16)
 		
 		if neg == 'F':
-			print 'negative number'
 			print binary
 			outbin = ""
 			for b in binary:
@@ -111,13 +110,14 @@ class Metrology(object):
 
 			
 		else:
-			temp = int('%s' % lm,0)/16.
-			return 	
+			print lm
+			temp = int('0x%s' % str(lm),0)/16.
+			return temp	
 		return 
 
 if __name__ == "__main__":
 	m = Metrology()
 	#m.setResolution('1C00000365971D28')
 	#time.sleep(2)
-	print m.readTemp('1C00000365971D28')
-	#m.run()
+	#print m.readTemp('1C00000365971D28')
+	m.run()
