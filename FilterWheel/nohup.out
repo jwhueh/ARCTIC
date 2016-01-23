@@ -1,0 +1,1203 @@
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 6, 'hall': '0001'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2646, 'hall': '0111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 0, 'currentStep': 5300, 'hall': '0111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 0, 'currentStep': 1331, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3970, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 3975, 'hall': '0111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 0, 'currentStep': 3971, 'hall': '0111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1331, 'hall': '0111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3978, 'hall': '0111'}
+3975
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 3975, 'hall': '0111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 0, 'currentStep': 3968, 'hall': '0111'}
+2650
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 2650, 'hall': '0111'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 0, 'currentStep': 2655, 'hall': '0111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 3972, 'hall': '0111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2656, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 0, 'currentStep': 5300, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3970, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2645, 'hall': '0111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 1325, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 1321, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+5300
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5293, 'hall': '0111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3981, 'hall': '0111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+5300
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 0, 'currentStep': 1331, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 3972, 'hall': '0111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2647, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1331, 'hall': '0111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 3971, 'hall': '0111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2645, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3970, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2656, 'hall': '0111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2647, 'hall': '0111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 1325, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 1321, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2645, 'hall': '0111'}
+0
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 1321, 'hall': '0111'}
+1325
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2655, 'hall': '0111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 2650, 'hall': '0111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2656, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 3975, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3971, 'hall': '0111'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 2650, 'hall': '0111'}
+1325
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2647, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1331, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3970, 'hall': '0111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 0, 'currentStep': 6, 'hall': '0001'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 3970, 'hall': '0111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2656, 'hall': '0111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 0, 'currentStep': 2646, 'hall': '0111'}
+5300
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 1321, 'hall': '0111'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 0, 'currentStep': 2644, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 0, 'currentStep': 2650, 'hall': '0111'}
+1325
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 2647, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 0, 'currentStep': 1319, 'hall': '0111'}
+1325
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 0, 'currentStep': 1325, 'hall': '0111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3979, 'hall': '0111'}
+0
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+3975
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3979, 'hall': '0111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 0, 'currentStep': 5297, 'hall': '0111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 0, 'currentStep': 2655, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 0, 'currentStep': 5300, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5296, 'hall': '0111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 0, 'currentStep': 3971, 'hall': '0111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 0, 'currentStep': 1330, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 0, 'currentStep': 3971, 'hall': '0111'}
+3975
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 0, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3979, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 0, 'currentStep': 5297, 'hall': '1111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 0, 'currentStep': 3979, 'hall': '0111'}
+0
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 0, 'currentStep': 5294, 'hall': '1111'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 1, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 1, 'hall': '0001'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1329, 'hall': '0111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3979, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2648, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2653, 'hall': '0111'}
+1325
+{'currentEncoder': 3973, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+0
+{'currentEncoder': 1323, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2647, 'hall': '0111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1328, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 2650, 'hall': '0111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2645, 'hall': '0111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2653, 'hall': '0111'}
+0
+{'currentEncoder': 3973, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 1323, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2645, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '0111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1328, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 3973, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2648, 'hall': '1111'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 2652, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '0111'}
+1325
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+0
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+2650
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 2650, 'hall': '0111'}
+0
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3978, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+5300
+{'currentEncoder': 2652, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '0111'}
+3975
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+5300
+{'currentEncoder': 3977, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '0111'}
+2650
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+1325
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+5300
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '0111'}
+1325
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '0111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '0111'}
+0
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+2650
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1329, 'hall': '0111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+5300
+{'currentEncoder': 3977, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '0111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3979, 'hall': '0111'}
+1325
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '0001'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+1325
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1328, 'hall': '0111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1322, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '0111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1322, 'hall': '0111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+2650
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+5300
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+2650
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+1325
+{'currentEncoder': 2648, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+5300
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1320, 'hall': '1111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '1111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+2650
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1328, 'hall': '1111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1328, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1322, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '1111'}
+3975
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+0
+{'currentEncoder': 2648, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+1325
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '1111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '1111'}
+5300
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+3975
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3973, 'hall': '1111'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '1111'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1328, 'hall': '0111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3979, 'hall': '0111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5298, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '0111'}
+3975
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1328, 'hall': '0111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3979, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5298, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '0111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+2650
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1329, 'hall': '0111'}
+3975
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+5300
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3978, 'hall': '1111'}
+1325
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5298, 'hall': '1111'}
+5300
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 5300, 'id': 6, 'currentStep': 1329, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5298, 'hall': '1111'}
+3975
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 4, 'hall': '1111'}
+2650
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1328, 'hall': '1111'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 2650, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2653, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5298, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+3975
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '1111'}
+0
+{'currentEncoder': 3973, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '1111'}
+0
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5293, 'hall': '1111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 4, 'hall': '1111'}
+2650
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1328, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 1324, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 1324, 'hall': '1111'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 1, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 1, 'hall': '0001'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+1325
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+0
+{'currentEncoder': 1323, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+5300
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+1325
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3972, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1322, 'hall': '0111'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 1325, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+0
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1323, 'hall': '0111'}
+2650
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2653, 'hall': '0111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1321, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2653, 'hall': '1111'}
+5300
+{'currentEncoder': 3977, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+0
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5297, 'hall': '1111'}
+1325
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+5300
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+0
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+5300
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+5300
+{'currentEncoder': 5301, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+0
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+2650
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2645, 'hall': '1111'}
+0
+{'currentEncoder': 1325, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1322, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+3975
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+1325
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 1325, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+0
+{'currentEncoder': 1323, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1320, 'hall': '1111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 6, 'hall': '0001'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2654, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+0
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3973, 'hall': '1111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '1111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2645, 'hall': '1111'}
+3975
+{'currentEncoder': 1327, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1331, 'hall': '1111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3978, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+0
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '1111'}
+Setting Up Device
+Arcus Product: Ace-Series-SDE
+Device Number: SDE01
+Set move mode to absolute: OK
+Disable Output, DOBOOT: OK
+Disable DIO, EDIO: OK
+Set Limit Polarity: OK
+Set Latch Polarity: OK
+Set Directional Polarity: OK
+S-Curve Ramp Enabled: OK
+Ignore Error Enabled: OK
+Motor Status, MST: 0
+Read Drive Parameters, RR: OK
+Set Drive Current, 1.5A, DRVRC: OK
+Write Motor Parameters, RW: OK
+Write SL Parameters, SNL: OK
+Write SNL Parameters, SNL: OK
+Clear Errors: OK
+LSPD: 300
+HSPD: 1000
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': None, 'id': 0, 'currentStep': 0, 'hall': '1111'}
+Starting Home Routine.
+Moving till home sensors detected.
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+36,0
+36,1
+38,0
+Step Value Set to 0
+Encoder Value Set to 0
+Near home position detected
+Starting slow home.
+36,0
+1	1	1	
+37,0
+0	1	1	
+Step Value Set to 0
+Encoder Value Set to 0
+Zeropoint found, Detecting FW ID.
+0	0	1	
+Moving to 0.
+LSPD: 300
+HSPD: 1000
+ID:110
+Filter ID: 110, 6
+0
+{'currentEncoder': 0, 'motor': 0, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 0, 'hall': '0001'}
+3975
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 3975, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+3975
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 3976, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+5300
+{'currentEncoder': 5300, 'motor': 0, 'power': 1, 'position': 4, 'desiredStep': 5300, 'id': 6, 'currentStep': 5300, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1319, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+1325
+{'currentEncoder': 2649, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '0111'}
+5300
+{'currentEncoder': 3975, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3978, 'hall': '1111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+0
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2646, 'hall': '0111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2654, 'hall': '1111'}
+3975
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+3975
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2654, 'hall': '0111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+5300
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+0
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 0, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+3975
+{'currentEncoder': 2652, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3970, 'hall': '1111'}
+2650
+{'currentEncoder': 2, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 5, 'hall': '0001'}
+5300
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2653, 'hall': '1111'}
+3975
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+5300
+{'currentEncoder': 3977, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 5300, 'id': 6, 'currentStep': 3980, 'hall': '1111'}
+2650
+{'currentEncoder': 5299, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+3975
+{'currentEncoder': 2652, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 3975, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+3975
+{'currentEncoder': 3975, 'motor': 0, 'power': 1, 'position': 3, 'desiredStep': 3975, 'id': 6, 'currentStep': 3975, 'hall': '1111'}
+2650
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 3971, 'hall': '1111'}
+0
+{'currentEncoder': 2650, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 0, 'id': 6, 'currentStep': 2647, 'hall': '1111'}
+5300
+{'currentEncoder': 0, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 5300, 'id': 6, 'currentStep': 4, 'hall': '0001'}
+1325
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5295, 'hall': '1111'}
+2650
+{'currentEncoder': 1327, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 2650, 'id': 6, 'currentStep': 1331, 'hall': '1111'}
+2650
+{'currentEncoder': 2650, 'motor': 0, 'power': 1, 'position': 2, 'desiredStep': 2650, 'id': 6, 'currentStep': 2650, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2653, 'hall': '1111'}
+2650
+{'currentEncoder': 5300, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 2650, 'id': 6, 'currentStep': 5296, 'hall': '1111'}
+5300
+{'currentEncoder': 2651, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 5300, 'id': 6, 'currentStep': 2655, 'hall': '1111'}
+1325
+{'currentEncoder': 5298, 'motor': 3, 'power': 1, 'position': 3, 'desiredStep': 1325, 'id': 6, 'currentStep': 5294, 'hall': '1111'}
+1325
+{'currentEncoder': 1325, 'motor': 0, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 1325, 'hall': '1111'}
+0
+{'currentEncoder': 1324, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 0, 'id': 6, 'currentStep': 1320, 'hall': '1111'}
+2650
+{'currentEncoder': 1, 'motor': 3, 'power': 1, 'position': 0, 'desiredStep': 2650, 'id': 6, 'currentStep': 4, 'hall': '1111'}
+1325
+{'currentEncoder': 2648, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 1325, 'id': 6, 'currentStep': 2645, 'hall': '1111'}
+3975
+{'currentEncoder': 1326, 'motor': 3, 'power': 1, 'position': 1, 'desiredStep': 3975, 'id': 6, 'currentStep': 1330, 'hall': '1111'}
+0
+{'currentEncoder': 3974, 'motor': 3, 'power': 1, 'position': 2, 'desiredStep': 0, 'id': 6, 'currentStep': 3969, 'hall': '1111'}

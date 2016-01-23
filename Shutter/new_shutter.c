@@ -21,6 +21,8 @@ struct timeval start_exp;
 struct timeval end_exp;
 static int lookingfor = 0;
 static int found = 0;
+static int shutter1 = 76;
+static int shutter2 = 77;
 
 void print_csv(int dio, int value){
         printf("%d,%d\n", dio, value);
@@ -32,11 +34,11 @@ void print_csv(int dio, int value){
 int homeStatus(){
         int statusval;
         if(evgetin(28) == 0 && evgetin(29) == 0){
-                statusval = 1; 
-                right = 1;
+                statusval = 0; //was 1
+                right = 0;  //was 1
         }else{  
-                statusval = 0;
-                right = 0;
+                statusval = 1;
+                right = 1;
         }       
 	return statusval;
 }
@@ -45,21 +47,21 @@ void move() {
 	found = 0;
 	if(pinval == 0){
 		if(right == 1){
-			evsetdata(77,1);
-			printf("moving left shutter right");
+			evsetdata(shutter1,1);  //was 77
+			printf("moving left shutter right\n");
 		}else{
-			evsetdata(76,0);
-			printf("moving right shutter left");
+			evsetdata(shutter2,0); //was 76
+			printf("moving right shutter left\n");
 		}
 	} else{
 		lookingfor = 0;
 		int status = homeStatus();
 		if(status == 1){
-			evsetdata(76,1);
-			printf("moving right shutter right");
+			evsetdata(shutter1,1);  //was 76
+			printf("moving right shutter right\n");
 		}else{
-			evsetdata(77,0);
-			printf("moving left shutter left");
+			evsetdata(shutter2,0);  //was 77
+			printf("moving left shutter left\n");
 		}
 	}
 }

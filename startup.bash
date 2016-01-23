@@ -31,3 +31,11 @@
 ./evgpioctl -i 39
 ./evgpioctl -m 40
 ./evgpioctl -i 40
+
+./evgpioctl -o 81
+./evgpioctl -l 81
+./evgpioctl -o 82
+./evgpioctl -l 82
+./evgpioctl -o 83
+./evgpioctl -l 83
+
