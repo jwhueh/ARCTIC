@@ -69,9 +69,16 @@ class FilterWheel(object):
 
 					print time.strftime("%Y%m%dT%H%M%S  homing: motor stopped, deteriming ID")
 					id_inverse = ""
+					self.moveArb(5)
+					stat = self.status()
+	                                hall = stat['hall']
+
+					#[rint hall
 					for r in range(3):
-						h = hall[r]
+						h = hall[3-r]
+						#print h
 						id_inverse = id_inverse + str(1 - int(h))
+					#print self.id, id_inverse
 					self.id = int(str(id_inverse),2)
                 			if(self.id != 0):
                         			self.fw = 0
