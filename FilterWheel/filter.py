@@ -70,7 +70,7 @@ class FilterWheel(object):
 					print time.strftime("%Y%m%dT%H%M%S  homing: motor stopped, deteriming ID")
 					id_inverse = ""
 					for r in range(3):
-						h = hall[3-r]
+						h = hall[r]
 						id_inverse = id_inverse + str(1 - int(h))
 					self.id = int(str(id_inverse),2)
                 			if(self.id != 0):
