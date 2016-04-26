@@ -14,6 +14,7 @@ Usage:
 Options:
   -d, --dir	directory for continuous look, if no directory gived it will default to current working directory
   -i, --im	single image
+  -f, --flat	flat image to use for quick reduction
   -w, --watch   run in continuous look mode
   -u, --usage	display the python help for this program
   -h, --help	diplay the python __doc__ usage information for this program
@@ -35,6 +36,7 @@ from astropy.io import fits
 import re
 import numpy as np
 import os
+from scipy import stats
 from scipy import misc
 from scipy.ndimage import interpolation
 import time
@@ -47,7 +49,7 @@ class ImageCombine(object):
 	def __init__(self):
 		pass
 
-	def imSplit(self, dir = None, image = None):
+	def imSplit(self, dir = None, image = None, flat = None):
 		"""
 		Break image into quadrants and subtract ovserscan
 		Args:
@@ -56,8 +58,8 @@ class ImageCombine(object):
 		Returns:
 			image (fits,jpg): fits and jpg saved image
 		"""
-		image = os.path.join(dir,image)
-		hdulist = fits.open(image)
+		data_im = os.path.join(dir,image)
+		hdulist = fits.open(data_im)
 		#verify that it is a quad image
 		amp = hdulist[0].header['READAMPS']
 		if re.search("quad",amp.lower()):
@@ -75,18 +77,34 @@ class ImageCombine(object):
 			scidata = hdulist[0].data  #grab the image
 
 			print "%s   breaking apart image into separate quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
-			quad_data=[]
+			quad_dict={}
 			for i,q in enumerate(quad):
 				data_name = 'D'+quad[i]
                                 overscan_name = 'B'+quad[i]
+				overscan = np.mean(scidata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
+				data = scidata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
+				quad_dict[overscan_name] = overscan
+				quad_dict[data_name] = data - overscan
+
+			flat_dict = {}
+			if flat != None:
+				flat_im = os.path.join(dir,flat)
+                		flat_hdu = fits.open(flat_im)
+				flatdata = flat_hdu[0].data
+				for i,q in enumerate(quad):
+                                	data_name = 'D'+quad[i]
+                                	overscan_name = 'B'+quad[i]
+					overscan = np.mean(flatdata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
+                                	data = flatdata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
+                                	flat_dict[overscan_name] = overscan
+					data  = (data - overscan) / np.median(data)
+                                	flat_dict[data_name] = data 
+					quad_dict[data_name] = quad_dict[data_name] / flat_dict[data_name]
+				flat_hdu.close()		
 				
-				quad_data.append(scidata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])] - np.mean(scidata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])]))
-
-			"""sci_bot = np.concatenate((quad_data['DSEC12'], quad_data['DSEC22']), axis = 1)
-                        sci_top = np.concatenate((quad_data['DSEC11'], quad_data['DSEC21']), axis = 1)"""
-
-			sci_bot = np.concatenate((quad_data[2], quad_data[3]), axis = 1)
-                        sci_top = np.concatenate((quad_data[0], quad_data[1]), axis = 1)
+			
+			sci_bot = np.concatenate((quad_dict['DSEC12'], quad_dict['DSEC22']), axis = 1)
+                        sci_top = np.concatenate((quad_dict['DSEC11'], quad_dict['DSEC21']), axis = 1)
 			sci = np.concatenate((sci_top, sci_bot), axis = 0)
 
 			out_name = image.rstrip('.fits') + '_comp'
@@ -97,23 +115,22 @@ class ImageCombine(object):
 			except:
 				None
 			im_mean = np.mean(sci)
-			#print im_mean, np.std(sci)
 			im_std = np.std(sci)
 			im_min = im_mean - im_std
 			im_max = im_mean + im_std
-			if im_min <0:
+			if im_min < 0:
 				im_min = 0.0
-			if im_max >=65000:
+			if im_max >= 65000:
 				im_max = 65000.0
-			print "%s   saving output images:"  % datetime.datetime.now().strftime("%H:%M:%S.%f")
-			print out_name + '.jpg'
-			print out_name +'.fits'
 			hdu = fits.PrimaryHDU(sci)
 			hdu.writeto(out_name +'.fits')
 			sci = interpolation.rotate(sci,180 )
 			sci = np.fliplr(sci)
 			im = misc.toimage(sci, cmin = im_min, cmax = im_max).save(out_name + '.jpg')
 		hdulist.close()
+		print "%s   saving output images:"  % datetime.datetime.now().strftime("%H:%M:%S.%f")
+                print out_name + '.jpg'
+                print out_name +'.fits'
 
 	def headerParser(self, im = None, keyword = None):
 		"""
@@ -176,13 +193,14 @@ class ImageCombine(object):
 if __name__ == "__main__":
 	i = ImageCombine()
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hud:i:w", ["help","usage", "dir", "image", "watch"])
+		opts, args = getopt.getopt(sys.argv[1:], "hud:i:wf:", ["help","usage", "dir", "image", "watch", "flat"])
 	except getopt.GetoptError as err:
 		print err
 		i.usage()
 		sys.exit()
 	dict_opts={}
 	dict_opts['d'] = os.getcwd()
+	dict_opts['f'] = None
 	for o, a in opts:
 		dict_opts[o.lstrip('-')] = a
 
@@ -191,6 +209,6 @@ if __name__ == "__main__":
 	elif 'u' in dict_opts:
 		help(i)
 	elif 'i' in dict_opts or 'image' in dict_opts:		
-		i.imSplit(dict_opts['d'],dict_opts['i'])
+		i.imSplit(dict_opts['d'],dict_opts['i'], dict_opts['f'])
 	elif 'w' in dict_opts or 'watch' in dict_opts:
 		i.imCheck(dict_opts['d'])
