@@ -25,7 +25,7 @@ Output:
 
 __author__ = ["Joseph Huehnerhoff"]
 __copyright__ = "NA"
-__credits__ = [""]
+__credits__ = ["Kolby Weisenburger"]
 __license__ = "GPL"
 __version__ = "0.2"
 __maintainer__ = "Joseph Huehnerhof"
@@ -42,6 +42,7 @@ import time
 import getopt
 import sys
 import thread
+import datetime
 
 class ImageCombine(object):
 	def __init__(self):
@@ -60,43 +61,33 @@ class ImageCombine(object):
 		hdulist = fits.open(image)
 		#verify that it is a quad image
 		amp = hdulist[0].header['READAMPS']
-		if amp == "Quad":
-			print "%s   processing quad amplifier data" % time.strftime("%H:%M:%S")
-			ll = self.headerParser(hdulist,'DSEC11')
-			ll_os = self.headerParser(hdulist,'BSEC11')
+		if re.search("quad",amp.lower()):
+			quad = ['SEC11', 'SEC21', 'SEC12', 'SEC22']
+			#11:ll, 21:ul, 12:lr, 22:ur
+			quad_pos={}
+			print "%s   processing quad amplifier data" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 
-                	ul = self.headerParser(hdulist,'DSEC21')
-			ul_os = self.headerParser(hdulist,'BSEC21')
-
-                	lr = self.headerParser(hdulist,'DSEC12')
-			lr_os = self.headerParser(hdulist,'BSEC12')
-
-                	ur = self.headerParser(hdulist,'DSEC22')
-			ur_os = self.headerParser(hdulist,'BSEC22')
+			for i,q in enumerate(quad):
+				data_name = 'D'+quad[i]
+				overscan_name = 'B'+quad[i]
+				quad_pos[data_name] = self.headerParser(hdulist, data_name)
+				quad_pos[overscan_name] = self.headerParser(hdulist, overscan_name)
 			
 			scidata = hdulist[0].data  #grab the image
 
-			print "%s   breaking apart image into separate quadrants" % time.strftime("%H:%M:%S")
-			scidata_ll = scidata[int(ll[2]):int(ll[3]),int(ll[0]):int(ll[1])]
-			osdata_ll = scidata[int(ll_os[2]):int(ll_os[3]),int(ll_os[0]):int(ll_os[1])]
+			print "%s   breaking apart image into separate quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
+			quad_data=[]
+			for i,q in enumerate(quad):
+				data_name = 'D'+quad[i]
+                                overscan_name = 'B'+quad[i]
+				
+				quad_data.append(scidata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])] - np.mean(scidata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])]))
 
-                        scidata_lr = scidata[int(lr[2]):int(lr[3]),int(lr[0]):int(lr[1])]
-			osdata_lr = scidata[int(lr_os[2]):int(lr_os[3]),int(lr_os[0]):int(lr_os[1])]
+			"""sci_bot = np.concatenate((quad_data['DSEC12'], quad_data['DSEC22']), axis = 1)
+                        sci_top = np.concatenate((quad_data['DSEC11'], quad_data['DSEC21']), axis = 1)"""
 
-                        scidata_ul = scidata[int(ul[2]):int(ul[3]),int(ul[0]):int(ul[1])]
-			osdata_ul = scidata[int(ul_os[2]):int(ul_os[3]),int(ul_os[0]):int(ul_os[1])]
-
-                        scidata_ur = scidata[int(ur[2]):int(ur[3]),int(ur[0]):int(ur[1])]
-			osdata_ur = scidata[int(ur_os[2]):int(ur_os[3]),int(ur_os[0]):int(ur_os[1])]
-
-			print "%s   subtracting overscan" % time.strftime("%H:%M:%S")
-			scidata_ll = scidata_ll - np.mean(osdata_ll)
-			scidata_lr = scidata_lr - np.mean(osdata_lr)
-			scidata_ul = scidata_ul - np.mean(osdata_ul)
-			scidata_ur = scidata_ur - np.mean(osdata_ur)
-
-			sci_bot = np.concatenate((scidata_lr, scidata_ur), axis = 1)
-			sci_top = np.concatenate((scidata_ll, scidata_ul), axis = 1)
+			sci_bot = np.concatenate((quad_data[2], quad_data[3]), axis = 1)
+                        sci_top = np.concatenate((quad_data[0], quad_data[1]), axis = 1)
 			sci = np.concatenate((sci_top, sci_bot), axis = 0)
 
 			out_name = image.rstrip('.fits') + '_comp'
@@ -115,7 +106,7 @@ class ImageCombine(object):
 				im_min = 0.0
 			if im_max >=65000:
 				im_max = 65000.0
-			print "%s   saving output images:"  % time.strftime("%H:%M:%S")
+			print "%s   saving output images:"  % datetime.datetime.now().strftime("%H:%M:%S.%f")
 			print out_name + '.jpg'
 			print out_name +'.fits'
 			hdu = fits.PrimaryHDU(sci)
