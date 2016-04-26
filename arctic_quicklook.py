@@ -2,7 +2,7 @@
 
 """
 arctic_quicklook.py
-Take single and quad mode imaging and remove overscan
+Take single and self.quad mode imaging and remove overscan
 
 TODO:
 create quick reduction options
@@ -47,11 +47,12 @@ import datetime
 
 class ImageCombine(object):
 	def __init__(self):
-		pass
+		self.quad = ['SEC11', 'SEC21', 'SEC12', 'SEC22']  #11:ll, 21:ul, 12:lr, 22:ur
+
 
 	def imSplit(self, dir = None, image = None, flat = None):
 		"""
-		Break image into quadrants and subtract ovserscan
+		Break image into self.quadrants and subtract ovserscan
 		Args:
 			dir (string): directory of images
 			image (string): name of image
@@ -60,49 +61,32 @@ class ImageCombine(object):
 		"""
 		data_im = os.path.join(dir,image)
 		hdulist = fits.open(data_im)
-		#verify that it is a quad image
+		#verify that it is a self.quad image
 		amp = hdulist[0].header['READAMPS']
 		if re.search("quad",amp.lower()):
-			quad = ['SEC11', 'SEC21', 'SEC12', 'SEC22']
-			#11:ll, 21:ul, 12:lr, 22:ur
-			quad_pos={}
-			print "%s   processing quad amplifier data" % datetime.datetime.now().strftime("%H:%M:%S.%f")
+			quad_pos = self.secParser(hdulist)
+			print "%s   processing self.quad amplifier data" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 
-			for i,q in enumerate(quad):
-				data_name = 'D'+quad[i]
-				overscan_name = 'B'+quad[i]
-				quad_pos[data_name] = self.headerParser(hdulist, data_name)
-				quad_pos[overscan_name] = self.headerParser(hdulist, overscan_name)
-			
 			scidata = hdulist[0].data  #grab the image
 
-			print "%s   breaking apart image into separate quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
-			quad_dict={}
-			for i,q in enumerate(quad):
-				data_name = 'D'+quad[i]
-                                overscan_name = 'B'+quad[i]
-				overscan = np.mean(scidata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
-				data = scidata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
-				quad_dict[overscan_name] = overscan
-				quad_dict[data_name] = data - overscan
-
+			print "%s   breaking apart image into separate self.quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
+			quad_dict = self.imageParser(scidata, quad_pos)
 			flat_dict = {}
-			if flat != None:
-				flat_im = os.path.join(dir,flat)
-                		flat_hdu = fits.open(flat_im)
-				flatdata = flat_hdu[0].data
-				for i,q in enumerate(quad):
-                                	data_name = 'D'+quad[i]
-                                	overscan_name = 'B'+quad[i]
-					overscan = np.mean(flatdata[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
-                                	data = flatdata[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
-                                	flat_dict[overscan_name] = overscan
-					data  = (data - overscan) / np.median(data)
-                                	flat_dict[data_name] = data 
-					quad_dict[data_name] = quad_dict[data_name] / flat_dict[data_name]
-				flat_hdu.close()		
+			try:
+				if flat != None:
+					flat_im = os.path.join(dir,flat)
+                			flat_hdu = fits.open(flat_im)
+					flatdata = flat_hdu[0].data
+					if np.mean(flatdata) > 50000:
+						print np.mean(flatdata)
+						raise ValueError
+					flat_dict = self.imageParser(flatdata,quad_pos, True, quad_dict)
+					flat_hdu.close()		
+			except ValueError:
+				print ('Not a good flat based on mean counts > 50K\n ',
+					'skipping flat reduction')
 				
-			
+			#stitch the image back together	
 			sci_bot = np.concatenate((quad_dict['DSEC12'], quad_dict['DSEC22']), axis = 1)
                         sci_top = np.concatenate((quad_dict['DSEC11'], quad_dict['DSEC21']), axis = 1)
 			sci = np.concatenate((sci_top, sci_bot), axis = 0)
@@ -132,7 +116,34 @@ class ImageCombine(object):
                 print out_name + '.jpg'
                 print out_name +'.fits'
 
-	def headerParser(self, im = None, keyword = None):
+	def imageParser(self, im = None, quad_pos = None, flat = False, im_dict = None):
+		"""Break the image into dictionaries and flat field if provided the data
+		Args:
+			im (fits): numpy array of fits image
+			quad_pos (list):  quadrant boundaries in IRAF format (x1,x2, y1,y2)
+			flat (bool): is there a flat field included
+			im_dict (dict):  dictionary of image in numpy format
+
+		Returns:
+			dict (dict):  dictionary of image in numpy format
+		"""
+		dict = {}
+		for i,q in enumerate(self.quad):
+	                data_name = 'D'+self.quad[i]
+                        overscan_name = 'B'+self.quad[i]
+                        overscan = np.mean(im[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
+                        data = im[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
+			if flat:
+				dict[overscan_name] = overscan
+                                data  = (data - overscan) / np.median(data)
+                                dict[data_name] = data 
+                                im_dict[data_name] = im_dict[data_name] / dict[data_name]
+			else:
+                        	dict[overscan_name] = overscan
+                        	dict[data_name] = data
+		return dict
+
+	def secParser(self, im = None):
 		"""
 		Break apart header ccd coordinates into numpy array format
 		Args:
@@ -142,8 +153,13 @@ class ImageCombine(object):
 			split (list) - list of ccd coordinates in IRAF coordinate system [x1, x2, y1, y2]
 			
 		"""
-		split = re.split('[: ,]',im[0].header[keyword].rstrip(']').lstrip('['))
-		return split
+		dict = {}
+		for i,q in enumerate(self.quad):
+                                data_sec = 'D'+self.quad[i]
+                                overscan_sec = 'B'+self.quad[i]
+                                dict[data_sec] = re.split('[: ,]',im[0].header[data_sec].rstrip(']').lstrip('['))
+                                dict[overscan_sec] = re.split('[: ,]',im[0].header[overscan_sec].rstrip(']').lstrip('['))
+		return dict
 		
 
 
