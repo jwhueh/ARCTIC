@@ -41,6 +41,7 @@ from scipy.ndimage import interpolation
 import time
 import getopt
 import sys
+import thread
 
 class ImageCombine(object):
 	def __init__(self):
@@ -153,15 +154,28 @@ class ImageCombine(object):
 	        	added = [f for f in after if not f in before]
         		removed = [f for f in before if not f in after]
 			if added and re.search('.fits',added[0]) and not re.search('_comp.fits', added[0]):
-				size = 0
+				"""	size = 0
 				im_add = os.path.join(path_to_watch, added[0])
 				while size - os.path.getsize(im_add) !=0:
 					size = os.path.getsize(im_add)
-					print "downlading: %s mb" % str(int(os.path.getsize(im_add))/(1024*1024))
-					time.sleep(1)
-				self.imSplit(path_to_watch, added[0])
+					print "downlading: %s mb" % (str(int(os.path.getsize(im_add))/(1024*1024)))
+					time.sleep(2)
+				time.sleep(2)
+				self.imSplit(path_to_watch, added[0])"""
+				thread.start_new_thread(self.download,(path_to_watch,added[0]))
 			before = after
 			time.sleep(1)
+
+	def download(self, path, im):
+		size = 0
+                im_add = os.path.join(path, im)
+                while size - os.path.getsize(im_add) !=0:
+                	size = os.path.getsize(im_add)
+                        print "downlading: %s mb" % (str(int(os.path.getsize(im_add))/(1024*1024)))
+                        time.sleep(2)
+                time.sleep(2)
+                self.imSplit(path,im)
+		return
 
 if __name__ == "__main__":
 	i = ImageCombine()
