@@ -5,9 +5,7 @@ arctic_quicklook.py
 Take single and quad mode imaging and remove overscan
 
 TODO:
-Make more robuse for slower internest connections
-subtract overscan from image
-divide by flats
+create quick reduction options
 
 Usage:
   single image reduce:	arctic_quicklook.py -d [dir] -i [image_name]
@@ -17,6 +15,8 @@ Options:
   -d, --dir	directory for continuous look, if no directory gived it will default to current working directory
   -i, --im	single image
   -w, --watch   run in continuous look mode
+  -u, --usage	display the python help for this program
+  -h, --help	diplay the python __doc__ usage information for this program
 
 Output:
  [image_name]_comp.fits
@@ -24,12 +24,11 @@ Output:
 """
 
 __author__ = ["Joseph Huehnerhoff"]
-__copyright__ = "NA"
 __credits__ = ["Kolby Weisenburger"]
 __license__ = "GPL"
-__version__ = "0.2"
+__version__ = "0.3"
 __maintainer__ = "Joseph Huehnerhof"
-__email__ = "NA"
+__email__ = "jwhueh@uw.edu"
 __status__ = "Developement"
 
 from astropy.io import fits
@@ -51,11 +50,11 @@ class ImageCombine(object):
 	def imSplit(self, dir = None, image = None):
 		"""
 		Break image into quadrants and subtract ovserscan
-		arguments:
-			dir - directory of images
-			image - name of image
-		return:
-			image - fits and jpg saved image
+		Args:
+			dir (string): directory of images
+			image (string): name of image
+		Returns:
+			image (fits,jpg): fits and jpg saved image
 		"""
 		image = os.path.join(dir,image)
 		hdulist = fits.open(image)
@@ -119,11 +118,11 @@ class ImageCombine(object):
 	def headerParser(self, im = None, keyword = None):
 		"""
 		Break apart header ccd coordinates into numpy array format
-		arguments:
-			im - astropy fitsio image format
-			keyword - header keyword
-		return:
-			split - list of ccd coordinates in IRAF coordinate system [x1, x2, y1, y2]
+		Args:
+			im (string): astropy fitsio image format
+			keyword (string): header keyword
+		Returns:
+			split (list) - list of ccd coordinates in IRAF coordinate system [x1, x2, y1, y2]
 			
 		"""
 		split = re.split('[: ,]',im[0].header[keyword].rstrip(']').lstrip('['))
@@ -134,10 +133,13 @@ class ImageCombine(object):
 	def imCheck(self, path_to_watch = None):
 		"""
 		look in a given directory for new images and process
-		arguments:
-			path_to_watch - directory to look for new images
-		return:
+		Args:
+			path_to_watch (string): directory to look for new images
+		Returns:
 			None
+
+		ToDo:
+			there should be some breakout sequence from the while loop
 		"""
 		before = dict ([(f, None) for f in os.listdir (path_to_watch)])
 		while True:
@@ -145,19 +147,12 @@ class ImageCombine(object):
 	        	added = [f for f in after if not f in before]
         		removed = [f for f in before if not f in after]
 			if added and re.search('.fits',added[0]) and not re.search('_comp.fits', added[0]):
-				"""	size = 0
-				im_add = os.path.join(path_to_watch, added[0])
-				while size - os.path.getsize(im_add) !=0:
-					size = os.path.getsize(im_add)
-					print "downlading: %s mb" % (str(int(os.path.getsize(im_add))/(1024*1024)))
-					time.sleep(2)
-				time.sleep(2)
-				self.imSplit(path_to_watch, added[0])"""
 				thread.start_new_thread(self.download,(path_to_watch,added[0]))
 			before = after
 			time.sleep(1)
+		return
 
-	def download(self, path, im):
+	def download(self, path = None, im = None):
 		size = 0
                 im_add = os.path.join(path, im)
                 while size - os.path.getsize(im_add) !=0:
@@ -168,21 +163,34 @@ class ImageCombine(object):
                 self.imSplit(path,im)
 		return
 
+	def usage(self):
+		print __doc__
+		print 'Author:',__author__
+		print 'Credits:',__credits__
+		print 'Maintainer:',__maintainer__
+                print 'Maintainer Email:',__email__
+		print 'License:',__license__
+		print 'Version:',__version__
+		print 'Status:',__status__
+
 if __name__ == "__main__":
 	i = ImageCombine()
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "h:d:i:w", ["help", "dir", "im", "watch"])
+		opts, args = getopt.getopt(sys.argv[1:], "hud:i:w", ["help","usage", "dir", "image", "watch"])
 	except getopt.GetoptError as err:
 		print err
-		help(i)
+		i.usage()
 		sys.exit()
-	im = None
-        dir = os.getcwd()
+	dict_opts={}
+	dict_opts['d'] = os.getcwd()
 	for o, a in opts:
-		if o in ('-d','--dir'):
-			dir = a
-		if o in ('-i','--im'):		
-			im = a	
-			i.imSplit(dir,im)
-		if o in ('-w','--watch'):
-			i.imCheck(dir)
+		dict_opts[o.lstrip('-')] = a
+
+	if 'h' in dict_opts or 'help' in dict_opts:	
+		i.usage()
+	elif 'u' in dict_opts:
+		help(i)
+	elif 'i' in dict_opts or 'image' in dict_opts:		
+		i.imSplit(dict_opts['d'],dict_opts['i'])
+	elif 'w' in dict_opts or 'watch' in dict_opts:
+		i.imCheck(dict_opts['d'])
