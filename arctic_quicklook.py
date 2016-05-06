@@ -27,7 +27,7 @@ Output:
 __author__ = ["Joseph Huehnerhoff"]
 __credits__ = ["Kolby Weisenburger"]
 __license__ = "GPL"
-__version__ = "0.3"
+__version__ = "0.4"
 __maintainer__ = "Joseph Huehnerhof"
 __email__ = "jwhueh@uw.edu"
 __status__ = "Developement"
@@ -52,7 +52,7 @@ class ImageCombine(object):
 
 	def imSplit(self, dir = None, image = None, flat = None, finder = False):
 		"""
-		Break image into self.quadrants and subtract ovserscan
+		Break image into quadrants and subtract ovserscan
 		Args:
 			dir (string): directory of images
 			image (string): name of image
@@ -61,15 +61,15 @@ class ImageCombine(object):
 		"""
 		data_im = os.path.join(dir,image)
 		hdulist = fits.open(data_im)
-		#verify that it is a self.quad image
+		#verify that it is a quad image
 		amp = hdulist[0].header['READAMPS']
 		if re.search("quad",amp.lower()):
 			quad_pos = self.secParser(hdulist)
-			print "%s   processing self.quad amplifier data" % datetime.datetime.now().strftime("%H:%M:%S.%f")
+			print "%s   processing quad amplifier data" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 
 			scidata = hdulist[0].data  #grab the image
 
-			print "%s   breaking apart image into separate self.quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
+			print "%s   breaking apart image into separate quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 			quad_dict = self.imageParser(scidata, quad_pos)
 			flat_dict = {}
 			try:
@@ -78,7 +78,6 @@ class ImageCombine(object):
                 			flat_hdu = fits.open(flat_im)
 					flatdata = flat_hdu[0].data
 					if np.mean(flatdata) > 50000:
-						print np.mean(flatdata)
 						raise ValueError
 					flat_dict = self.imageParser(flatdata,quad_pos, True, quad_dict)
 					flat_hdu.close()		
@@ -108,10 +107,9 @@ class ImageCombine(object):
 				im_max = 65000.0
 			hdu = fits.PrimaryHDU(sci)
 			hdu.writeto(out_name +'.fits')
-			print finder
 			if finder:
 				 #needs to be place before the rotation otherwise the plotting is rotated.
-				self.finderChart(hdulist, dir, sci, im_min, im_max)
+				finder_name = self.finderChart(image.rstrip('.fits'), hdulist, dir, sci, im_min, im_max)
 			sci = interpolation.rotate(sci,180 )
 			sci = np.fliplr(sci)
 			im = misc.toimage(sci, cmin = im_min, cmax = im_max).save(out_name + '.jpg')
@@ -119,9 +117,21 @@ class ImageCombine(object):
 		print "%s   saving output images:"  % datetime.datetime.now().strftime("%H:%M:%S.%f")
                 print out_name + '.jpg'
                 print out_name +'.fits'
+		#print finder_name
 	
-	def finderChart(self, hdulist = None, dir = None, im_array = None, min = 0,max = 65000):
-		"""Overlay a finder chart on the image
+	def finderChart(self, image_name = None, hdulist = None, dir = None, im_array = None, min = 0,max = 65000):
+		"""
+		Overlay a finder chart on the image
+		Args:
+			image_name (str): output image name
+			hudlist (fits): opened fits file
+			dir (str):  working directory
+			im_array (array):  array for reduced data
+			min (int):  minimum stretch threshold
+			max (int): maximum stretch threshold
+
+		Returns:
+			plot (jpg): image of overlayed finder chart on acquired data 
 		"""
 		from astroplan.plots.finder import plot_finder_image
 		from astroquery.skyview import SkyView
@@ -133,18 +143,16 @@ class ImageCombine(object):
 		print "%s  Overlaying finding chart" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 		ra = hdulist[0].header['RA']
 		dec = hdulist[0].header['DEC']
-		#coord = '17:58:33.4, 66:37:59.5'
 		coord = SkyCoord(ra+' ' +dec, unit=(u.hourangle,u.deg)) 
 		position = coord
     		coordinates = hdulist[0].header['RADECSYS']
-		#hdulist.close()
 		
 		ax, hdu = plot_finder_image(position,fov_radius=.133*u.degree)
-		#plt.plot(ax,hdu)
 		plt.imshow(im_array, clim=(min,max), alpha=.5, interpolation = 'nearest', origin = 'center',extent=[0,293,0,293])
-		out_finder = os.path.join(dir,'test.jpg')
-		plt.savefig(out_finder)
+		image_name = image_name + '_finder.jpg'
+		plt.savefig(image_name)
 		plt.close()
+		return image_name
 
 	def imageParser(self, im = None, quad_pos = None, flat = False, im_dict = None):
 		"""Break the image into dictionaries and flat field if provided the data
@@ -166,7 +174,6 @@ class ImageCombine(object):
 			if flat:
 				dict[overscan_name] = overscan
                                 data  = (data - overscan) / np.median(data)
-				print np.median(data)
                                 dict[data_name] = data 
                                 im_dict[data_name] = im_dict[data_name] / dict[data_name]
 			else:
@@ -247,7 +254,8 @@ if __name__ == "__main__":
 		sys.exit()
 	dict_opts={}
 	dict_opts['d'] = os.getcwd()
-	dict_opts['f'] = False
+	dict_opts['f'] = None
+	dict_opts['s'] = False
 	for o, a in opts:
 		dict_opts[o.lstrip('-')] = a
 
