@@ -71,6 +71,7 @@ class ImageCombine(object):
 
 			print "%s   breaking apart image into separate quadrants" % datetime.datetime.now().strftime("%H:%M:%S.%f")
 			quad_dict = self.imageParser(scidata, quad_pos)
+			print quad_dict
 			flat_dict = {}
 			try:
 				if flat != None:
@@ -167,18 +168,28 @@ class ImageCombine(object):
 		"""
 		dict = {}
 		for i,q in enumerate(self.quad):
-	                data_name = 'D'+self.quad[i]
-                        overscan_name = 'B'+self.quad[i]
-                        overscan = np.mean(im[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
-                        data = im[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
-			if flat:
-				dict[overscan_name] = overscan
-                                data  = (data - overscan) / np.median(data)
-                                dict[data_name] = data 
-                                im_dict[data_name] = im_dict[data_name] / dict[data_name]
-			else:
-                        	dict[overscan_name] = overscan
-                        	dict[data_name] = data
+			try:
+	                	data_name = 'D'+self.quad[i]
+				overscan_name = 'B'+self.quad[i]
+	                        overscan = np.mean(im[int(quad_pos[overscan_name][2]):int(quad_pos[overscan_name][3]),int(quad_pos[overscan_name][0]):int(quad_pos[overscan_name][1])])
+        	                data = im[int(quad_pos[data_name][2]):int(quad_pos[data_name][3]),int(quad_pos[data_name][0]):int(quad_pos[data_name][1])]
+                	        if flat:
+                        	        dict[overscan_name] = overscan
+                               		data  = (data - overscan) / np.median(data)
+                                	dict[data_name] = data
+                                	im_dict[data_name] = im_dict[data_name] / dict[data_name]
+                        	else:
+                                	dict[overscan_name] = overscan
+                                	dict[data_name] = data
+
+			except:
+				data_name = 'A'+self.quad[i]
+				print quad_pos
+				#print data_name, quad_pos[data_name.replace('A','D')][2], quad_pos[data_name][3],quad_pos[data_name][0],quad_pos[data_name][1]
+				data = im[int(quad_pos[data_name.replace('A','D')][2]):int(quad_pos[data_name.replace('A','D')][3]),int(quad_pos[data_name.replace('A','D')][0]):int(quad_pos[data_name.replace('A','D')][1])]
+				print data
+				dict[data_name.replace('A','D')] = data
+
 		return dict
 
 	def secParser(self, im = None):
@@ -193,10 +204,15 @@ class ImageCombine(object):
 		"""
 		dict = {}
 		for i,q in enumerate(self.quad):
-                                data_sec = 'D'+self.quad[i]
-                                overscan_sec = 'B'+self.quad[i]
-                                dict[data_sec] = re.split('[: ,]',im[0].header[data_sec].rstrip(']').lstrip('['))
-                                dict[overscan_sec] = re.split('[: ,]',im[0].header[overscan_sec].rstrip(']').lstrip('['))
+				try:
+                                	data_sec = 'D'+self.quad[i]
+                                	overscan_sec = 'B'+self.quad[i]
+                                	dict[data_sec] = re.split('[: ,]',im[0].header[data_sec].rstrip(']').lstrip('['))
+                                	dict[overscan_sec] = re.split('[: ,]',im[0].header[overscan_sec].rstrip(']').lstrip('['))
+				except:
+					data_sec = 'A'+self.quad[i]
+					dict[data_sec.replace('A','D')] = re.split('[: ,]',im[0].header[data_sec].rstrip(']').lstrip('['))
+		print dict
 		return dict
 		
 
