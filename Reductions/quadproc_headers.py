@@ -32,6 +32,6 @@ for f in fi:
 				new_imtyp = imtyp.lower()
 			header['IMAGETYP'] = new_imtyp
 			print "Image Type Change from: ", imtyp,"==>", new_imtyp
-			fits.writeto(f, data, header, clobber=True)
-		except IOError:
+			fits.writeto(f, data, header, clobber=True, output_verify='ignore')
+		except IOError, VerifyError:
 			print "failed to update file header"
