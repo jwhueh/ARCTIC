@@ -194,3 +194,4 @@ if __name__ == "__main__":
 	#	f.moveToPosition(random.randrange(0,5,1))
 	#	time.sleep(5)
 	#f.moveToPosition(0)
+	f.disconnect()

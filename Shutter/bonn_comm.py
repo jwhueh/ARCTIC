@@ -2,13 +2,13 @@
 
 import time
 import serial
-import temp
+#import temp
 
 class bonn(object):
 	def __init__(self):
 		self.ser = None
 		self.serial = '/dev/ttyUSB0'
-		self.m = temp.Metrology()
+		#self.m = temp.Metrology()
 
 	def connect(self):
                 self.ser = serial.Serial(self.serial,19200)
@@ -27,6 +27,21 @@ class bonn(object):
 	def shutterReset(self):
 		self.ser.write('rs\r')
 
+
+	def coldParam(self):
+		accel = 'ac 3\r'
+		vel = 'vm 10000\r'
+		self.ser.write(accel)
+		time.sleep(2)
+		self.ser.write(vel)
+		time.sleep(2)
+		self.shutterReset()
+		time.sleep(10)
+		self.ser.write('sh\r')
+
+		return
+		
+	
 	def shutterStatus(self):
 		self.ser.write('ss\r')
 		line =  self.ser.readline()
@@ -53,14 +68,17 @@ if __name__ == "__main__":
 	b.connect()
 	time.sleep(2)
 	b.shutterStatus()
+	"""time.sleep(2)
+	b.coldParam()
 	time.sleep(2)
 	b.closeShutter()
-	"""for x in range(1000):
+	for x in range(1000):
 		b.openShutter()
 		time.sleep(1)
 		b.shutterStatus()
-		time.sleep(30)
+		time.sleep(1)
 		b.closeShutter()
 		time.sleep(1)
 		b.shutterStatus()
-		time.sleep(30)"""
+		time.sleep(1)
+	"""
