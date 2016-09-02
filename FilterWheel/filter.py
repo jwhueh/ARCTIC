@@ -191,7 +191,7 @@ class FilterWheel(object):
         when implemented: set the self.diffuserInBeam to 1 only after the move is complete
         (if already in the beam, do nothing here)
         """
-        self.diffuserInBeam = 1
+        self.diffuInBeam = 1
 
     def moveDiffuOut(self):
         """Move the diffuser out of the beam.
@@ -199,7 +199,7 @@ class FilterWheel(object):
         when implemented: set the self.diffuserInBeam to 0 only after the move is complete
         (if already in the beam, do nothing here)
         """
-        self.diffuserInBeam = 0
+        self.diffuInBeam = 0
 
     def startDiffuRot(self):
         """Start the diffuser rotating.  The ICC will (should) only command this if the
