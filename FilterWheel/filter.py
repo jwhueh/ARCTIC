@@ -16,8 +16,8 @@ class FilterWheel(object):
         self.abortStatus = False
         self.filterDelta = 1325
         self.homingState = False
-        self.diffuInBeam = None
-        self.diffuRotating = None
+        self.diffuInBeam = 0
+        self.diffuRotating = 0
 
 
     def connect(self):
