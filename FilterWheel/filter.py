@@ -211,14 +211,14 @@ class FilterWheel(object):
         diffuser is already in the beam.  Its up to you how to handle this method being
         called if the diffuser is not in the beam.
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -s 76", shell=True)
+	subprocess.call("/root/ARCTIC/evgpioctl -s 77", shell=True)
         self.diffuRotating = 1
 	return True
 
     def stopDiffuRot(self):
         """Stop the diffuser rotating.
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -l 76", shell=True)
+	subprocess.call("/root/ARCTIC/evgpioctl -l 77", shell=True)
         self.diffuRotating = 0
 	return False
 
