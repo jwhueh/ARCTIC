@@ -7,6 +7,8 @@ import random
 import numpy as np
 import subprocess
 
+startupScript = "/root/ARCTIC/startup.bash"
+
 class FilterWheel(object):
     def __init__(self):
         self.filter = CDLL(os.path.join(os.getenv("FILTERDIR"), "filter_motor.so"))
@@ -19,7 +21,12 @@ class FilterWheel(object):
         self.homingState = False
         self.diffuInBeam = 0
         self.diffuRotating = 0
-        subprocess.call("/root/ARCTIC/evgpioctl -s 76", shell=True)
+        if os.path.exists(startupScript):
+            print("calling %s"%startupScript)
+            g = subprocess.Popen("/bin/sh %s"%startupScript, shell=True, cwd="/root/ARCTIC")
+            g.wait()
+        else:
+            print("warning: %s doesn't exist"%startupScript)
 
 
     def connect(self):
