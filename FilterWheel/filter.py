@@ -19,6 +19,7 @@ class FilterWheel(object):
         self.homingState = False
         self.diffuInBeam = 0
         self.diffuRotating = 0
+        subprocess.call("/root/ARCTIC/evgpioctl -s 76", shell=True)
 
 
     def connect(self):
@@ -192,9 +193,9 @@ class FilterWheel(object):
         when implemented: set the self.diffuserInBeam to 1 only after the move is complete
         (if already in the beam, do nothing here)
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -s 76", shell=True)
+        subprocess.call("/root/ARCTIC/evgpioctl -s 76", shell=True)
         self.diffuInBeam = 1
-	return True
+        return True
 
     def diffuOut(self):
         """Move the diffuser out of the beam.
@@ -202,25 +203,25 @@ class FilterWheel(object):
         when implemented: set the self.diffuserInBeam to 0 only after the move is complete
         (if already in the beam, do nothing here)
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -l 76", shell=True)
+        subprocess.call("/root/ARCTIC/evgpioctl -l 76", shell=True)
         self.diffuInBeam = 0
-	return False
+        return False
 
     def startDiffuRot(self):
         """Start the diffuser rotating.  The ICC will (should) only command this if the
         diffuser is already in the beam.  Its up to you how to handle this method being
         called if the diffuser is not in the beam.
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -s 77", shell=True)
+        subprocess.call("/root/ARCTIC/evgpioctl -s 77", shell=True)
         self.diffuRotating = 1
-	return True
+        return True
 
     def stopDiffuRot(self):
         """Stop the diffuser rotating.
         """
-	subprocess.call("/root/ARCTIC/evgpioctl -l 77", shell=True)
+        subprocess.call("/root/ARCTIC/evgpioctl -l 77", shell=True)
         self.diffuRotating = 0
-	return False
+        return False
 
 if __name__ == "__main__":
     f = FilterWheel()
