@@ -29,7 +29,7 @@ class bonn(object):
 
 
 	def coldParam(self):
-		accel = 'ac 3\r'
+		accel = 'ac 4\r'
 		vel = 'vm 10000\r'
 		self.ser.write(accel)
 		time.sleep(2)
