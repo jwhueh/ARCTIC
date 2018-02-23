@@ -77,6 +77,8 @@ class FilterWheel(object):
                     print(time.strftime("%Y%m%dT%H%M%S  homing: at home position"))
                     self.stop()
                     time.sleep(.5)
+                    postStopStat = self.status()
+                    print("home status: %s"%(str(postStopStat)))
                     self.zero()
 
                     print(time.strftime("%Y%m%dT%H%M%S  homing: motor stopped, deteriming ID"))
