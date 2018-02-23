@@ -72,6 +72,7 @@ class FilterWheel(object):
             for x in range(2000):
                 stat = self.status()
                 hall = stat['hall']
+                print("x: %i status: %s"%(x, str(stat)))
                 if hall != '0111' and hall != '1111' and len(crossArr) > 4:
                     print(time.strftime("%Y%m%dT%H%M%S  homing: at home position"))
                     self.stop()
